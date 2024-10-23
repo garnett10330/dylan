@@ -1,0 +1,135 @@
+# Docker 運行 MySQL 的命令示例
+#docker container run --name WeiMySQL -p 3306:3306 -e MYSQL_ROOT_PASSWORD=qwe123 -e MYSQL_DATABASE=weitest -e MYSQL_USER=weichen -e MYSQL_PASSWORD=qwe123 mysql
+
+# 服務器配置
+server:
+  port: 8650  # 應用程序運行的端口
+
+# Spring 相關配置
+spring:
+  application:
+    name: weitestfargate  # 應用程序名稱
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss  # 日期格式化
+    time-zone: GMT+8  # 時區設置
+
+  # 數據源配置
+  datasource:
+    url: jdbc:mysql://localhost:3306/weitest?allowMultiQueries=true&rewriteBatchedStatements=true&useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=utf8  # MySQL 連接 URL
+    username: weichen  # 數據庫用戶名
+    password: qwe123  # 數據庫密碼
+    driver-class-name: com.mysql.cj.jdbc.Driver  # MySQL 驅動類
+    hikari:  # HikariCP 連接池配置
+      connection-test-query: SELECT 1
+      pool-name: HikariPool-MySQL
+      maximum-pool-size: 200  # 最大連接數
+      minimum-idle: 5  # 最小空閒連接數
+      idle-timeout: 300000  # 空閒連接超時時間（毫秒）
+      max-lifetime: 1800000  # 連接最大生命週期（毫秒）
+      connection-timeout: 10000  # 連接超時時間（毫秒）
+
+  # JPA 配置
+  jpa:
+    show-sql: false  # 是否顯示 SQL 查詢
+    hibernate:
+      ddl-auto: none  # 不自動更新數據庫結構
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl  # 命名策略，解決表名大小寫問題
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect  # MySQL 方言
+        jdbc:
+          batch_size: 100  # 批處理大小
+        order_inserts: true  # 批量插入優化
+        order_updates: true  # 批量更新優化
+        generate_statistics: false  # 不生成統計信息
+        cache:
+          use_second_level_cache: false  # 不使用二級緩存
+          use_query_cache: false  # 不使用查詢緩存
+  rabbitmq:
+      username: user
+      password: password
+      connection-timeout: 60000
+      requested-heartbeat: 60
+      cache:
+        channel:
+          size: 25
+      listener:
+        simple:
+          acknowledge-mode: manual
+        retry:
+          enabled: true
+          initial-interval: 1000
+          max-attempts: 3
+          max-interval: 10000
+          multiplier: 2.0
+  rabbitmq-config:
+    normalQueue: normal-queue
+    noDlqQueue: no-dlq-queue
+    dlqQueue: normal-queue-dlq
+    exchangeName: normal-exchange
+    dlqExchangeName: dlx-exchange
+  redis:
+    enabled: true
+    cluster:
+        nodes:
+          localhost:6380,localhost:6381,localhost:6382,localhost:6383,localhost:6384,localhost:6385
+#          localhost:6379
+#          localhost:6380
+#          localhost:6381
+#          localhost:6382
+#          localhost:6383
+#          localhost:6384
+
+    timeout: 6000    # 連接超時（毫秒）
+    lettuce:
+      pool:
+        max-active: 8   # 連接池最大連接數
+        max-idle: 8     # 連接池最大空閒連接數
+        min-idle: 1     # 連接池最小空閒連接數
+        max-wait: 5000  # 最大等待時間（毫秒）
+  security:
+    user:
+      name: weichen
+      password: qwe123
+      roles: ACTUATOR_ADMIN
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,prometheus
+      base-path: /actuator
+    enabled-by-default: false
+  endpoint:
+    health:
+      enabled: true
+      show-details: never
+      group:
+        liveness:
+          include: ping
+        readiness:
+          include: db
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    enable:
+      jvm: true
+      process: true
+      system: true
+      http: true
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: false
+    tags:
+      application: ${spring.application.name}
+  server:
+    port: 8081
+
