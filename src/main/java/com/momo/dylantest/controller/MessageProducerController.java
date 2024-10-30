@@ -28,5 +28,9 @@ public class MessageProducerController {
     public Response sendToNoDlq(@RequestParam String message) {
         return Response.success(messageService.sendToNoDlq(message));
     }
+    @RequestMapping("/sendMutiToNoDlq")
+    public Response sendMutiToNoDlq(@RequestParam String message) {
+        return Response.success(messageService.sendMutiToNoDlq(message));
+    }
 
 }

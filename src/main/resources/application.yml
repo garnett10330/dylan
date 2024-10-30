@@ -8,7 +8,7 @@ server:
 # Spring 相關配置
 spring:
   application:
-    name: weitestfargate  # 應用程序名稱
+    name: dylantest  # 應用程序名稱
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss  # 日期格式化
     time-zone: GMT+8  # 時區設置
@@ -53,10 +53,15 @@ spring:
       requested-heartbeat: 60
       cache:
         channel:
-          size: 25
+          size: 100  # 根據實際需求調整
+          checkout-timeout: 10000  # 毫秒，可根據需要調整
+        connection:
+          mode: channel  # 缓存通道
       listener:
         simple:
           acknowledge-mode: manual
+          concurrency: 5 # 消费端的监听个数(即@RabbitListener开启几个线程去处理数据。)
+          max-concurrency: 50 # 消费端的监听最大个数
         retry:
           enabled: true
           initial-interval: 1000
@@ -84,9 +89,9 @@ spring:
     timeout: 6000    # 連接超時（毫秒）
     lettuce:
       pool:
-        max-active: 8   # 連接池最大連接數
-        max-idle: 8     # 連接池最大空閒連接數
-        min-idle: 1     # 連接池最小空閒連接數
+        max-active: 16   # 連接池最大連接數
+        max-idle: 16     # 連接池最大空閒連接數
+        min-idle: 4     # 連接池最小空閒連接數
         max-wait: 5000  # 最大等待時間（毫秒）
   security:
     user:
@@ -98,7 +103,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,metrics,prometheus
+        include: health,metrics,prometheus,rabbitmq
       base-path: /actuator
     enabled-by-default: false
   endpoint:

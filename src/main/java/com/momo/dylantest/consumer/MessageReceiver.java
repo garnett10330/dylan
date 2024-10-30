@@ -1,7 +1,7 @@
 package com.momo.dylantest.consumer;
 
 
-import com.momo.dylantest.configProperties.RabbitMQProperties;
+import com.momo.dylantest.configProperties.RabbitMQConfigProperties;
 import com.momo.dylantest.util.LogUtil;
 import com.rabbitmq.client.Channel;
 import jakarta.annotation.Resource;
@@ -17,14 +17,14 @@ import java.io.IOException;
 @Service
 public class MessageReceiver {
     @Resource
-    private RabbitMQProperties rabbitMQProperties;
+    private RabbitMQConfigProperties rabbitMQConfigProperties;
 
     // 监听普通队列，手动ACK
-    @RabbitListener(queues = "#{rabbitMQProperties.normalQueue}")
+    @RabbitListener(queues = "#{rabbitMQConfigProperties.normalQueue}")
     public void receiveNormalQueue(Message message, @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag, Channel channel) throws Exception {
         try {
             String msg = new String(message.getBody());
-            log.info(LogUtil.info(2,"receiveNormalQueue","消費訊息:"+msg));
+            log.info(LogUtil.info(LogUtil.GATE_FRONT,"receiveNormalQueue","消費訊息:"+msg));
             // 故意抛出异常，模拟处理失败
             if ("fail".equals(msg)) {
                 throw new RuntimeException("測試死信對列");
@@ -39,11 +39,11 @@ public class MessageReceiver {
     }
 
     // 监听无死信队列的队列，手动ACK
-    @RabbitListener(queues = "#{rabbitMQProperties.noDlqQueue}")
+    @RabbitListener(queues = "#{rabbitMQConfigProperties.noDlqQueue}")
     public void receiveNoDlqQueue(Message message, @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag, Channel channel) throws Exception {
         try {
             String msg = new String(message.getBody());
-            log.info(LogUtil.info(2,"receiveNoDlqQueue","消費訊息:"+msg));
+            log.info(LogUtil.info(LogUtil.GATE_FRONT,"receiveNoDlqQueue","消費訊息:"+msg));
             // 处理消息后手动ACK
             channel.basicAck(deliveryTag, false);
         } catch (Exception e) {
@@ -54,12 +54,12 @@ public class MessageReceiver {
     }
 
     // 监听死信队列
-    @RabbitListener(queues = "#{rabbitMQProperties.dlqQueue}")
+    @RabbitListener(queues = "#{rabbitMQConfigProperties.dlqQueue}")
     public void receiveDeadLetterQueue(Message message, Channel channel,
                                        @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag) throws IOException {
         try {
             String msg = new String(message.getBody());
-            log.info(LogUtil.info(2,"receiveDeadLetterQueue","消費死信對列訊息:"+msg));
+            log.info(LogUtil.info(LogUtil.GATE_FRONT,"receiveDeadLetterQueue","消費死信對列訊息:"+msg));
             channel.basicAck(deliveryTag, false);
         } catch (Exception e) {
             log.error(LogUtil.error("receiveDeadLetterQueue:"+new String(message.getBody()),e));

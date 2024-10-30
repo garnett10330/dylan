@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "spring-rabbitmq-config")
 @Data
-public class RabbitMQProperties {
+public class RabbitMQConfigProperties {
     private String normalQueue = "normal-queue";
     private String noDlqQueue = "no-dlq-queue";
     private String dlqQueue = "normal-queue-dlq";
