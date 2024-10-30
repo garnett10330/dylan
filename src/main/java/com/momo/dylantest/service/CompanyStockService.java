@@ -34,13 +34,13 @@ public class CompanyStockService {
         }
         long count = companyStockRepository.count();
         long start = System.currentTimeMillis();
-        companyStockRepository.batchInsertJdbc(listAll);
+        companyStockRepository.insertBatchJdbc(listAll);
         long end = System.currentTimeMillis();
         log.info(LogUtil.info(LogUtil.GATE_FRONT,"batchInsertJdbc","searchCompany消耗時間:"+(start-starts)+",count:"+count+",batchInsertJdbc消耗時間:"+(end-start)+",比數:"+listAll.size()));
         return (end-start);
     }
     @Transactional(rollbackFor = Exception.class)
-    public long testHighPerformanceBatchInsert(String companyName) throws Exception{
+    public long insertBatchHighPerformance(String companyName) throws Exception{
         long starts = System.currentTimeMillis();
         List<CompanyStock> listAll = new ArrayList<>();
         List<CompanyStock> list = fmpApi.searchCompany(companyName);
@@ -49,7 +49,7 @@ public class CompanyStockService {
         }
         long count = companyStockRepository.count();
         long start = System.currentTimeMillis();
-        companyStockRepository.highPerformanceBatchInsert(listAll);
+        companyStockRepository.insertBatchHighPerformance(listAll);
         long end = System.currentTimeMillis();
         log.info(LogUtil.info(LogUtil.GATE_FRONT,"highPerformanceBatchInsert","searchCompany消耗時間:"+(start-starts)+",count:"+count+",highPerformanceBatchInsert消耗時間:"+(end-start)+",比數:"+listAll.size()));
         return (end-start);

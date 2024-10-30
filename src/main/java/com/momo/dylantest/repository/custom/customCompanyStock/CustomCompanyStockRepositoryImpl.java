@@ -22,7 +22,7 @@ public class CustomCompanyStockRepositoryImpl implements CustomCompanyStockRepos
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void batchInsertJdbc(List<CompanyStock> list) {
+    public void insertBatchJdbc(List<CompanyStock> list) {
         LocalDateTime now = LocalDateTime.now();
         String sql = "INSERT INTO weitest.company_stock (symbol, name, stock_exchange, exchange_short_name, currency) VALUES (?,?,?,?,?)";
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
@@ -43,7 +43,7 @@ public class CustomCompanyStockRepositoryImpl implements CustomCompanyStockRepos
     }
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void highPerformanceBatchInsert(List<CompanyStock> stocks) throws SQLException {
+    public void insertBatchHighPerformance(List<CompanyStock> stocks) throws SQLException {
         int batchSize = 1000; // 可以根據實際情況調整
 
         for (int i = 0; i < stocks.size(); i += batchSize) {

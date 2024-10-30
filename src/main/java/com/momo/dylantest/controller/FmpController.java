@@ -29,7 +29,7 @@ public class FmpController {
 
     @GetMapping("/saveAll")
     public Response saveAll(@RequestParam String companyName) throws Exception{
-        return Response.success(companyStockService.testHighPerformanceBatchInsert(companyName));
+        return Response.success(companyStockService.insertBatchHighPerformance(companyName));
     }
 
     @GetMapping("/stocks")
