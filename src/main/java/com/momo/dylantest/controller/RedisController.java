@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 public class RedisController {
@@ -17,24 +18,13 @@ public class RedisController {
     private RedisTemplate<String, Object> redisTemplate;
 
 
-    @GetMapping("/set")
-    public String setValue() {
-        redisTemplate.opsForValue().set("key", "value");
-        return "Value set in Redis";
-    }
-
-    @GetMapping("/get")
-    public String getValue() {
-        return (String) redisTemplate.opsForValue().get("key");
-    }
-
     @GetMapping("/setObject")
     public Response setValue(@RequestParam String key, @RequestParam String data) {
         CompanyStock companyStock = new CompanyStock();
         companyStock.setId(12345);
         companyStock.setGmtCreated(LocalDateTime.now());
         companyStock.setSymbol(data);
-        redisTemplate.opsForValue().set(key, companyStock);
+        redisTemplate.opsForValue().set(key, companyStock,100, TimeUnit.SECONDS);
         return Response.success("Value set in Redis");
     }
     @GetMapping("/getObject")

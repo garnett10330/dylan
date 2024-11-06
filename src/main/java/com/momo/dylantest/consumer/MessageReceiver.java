@@ -26,7 +26,7 @@ public class MessageReceiver {
             String msg = new String(message.getBody());
             log.info(LogUtil.info(LogUtil.GATE_FRONT,"receiveNormalQueue","消費訊息:"+msg));
             // 故意抛出异常，模拟处理失败
-            if ("fail".equals(msg)) {
+            if(msg.contains("fail")){
                 throw new RuntimeException("測試死信對列");
             }
             // 处理消息后手动ACK

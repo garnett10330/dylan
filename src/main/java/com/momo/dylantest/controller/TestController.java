@@ -40,11 +40,6 @@ public class TestController {
     }
 
 
-    @GetMapping("/testStr")
-    public Response testStr(){
-        return Response.success("test success");
-    }
-
 
 
 }

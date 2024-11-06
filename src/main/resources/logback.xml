@@ -44,12 +44,12 @@
     </appender>
 
     <!-- 只打印业务日志到文件（假设你的业务代码包是 com.myapp） -->
-    <logger name="com.myapp" level="INFO" additivity="false">
+    <logger name="com.momo" level="INFO" additivity="false">
         <appender-ref ref="INFO_FILE" />
     </logger>
 
     <!-- 只打印业务错误日志到文件 -->
-    <logger name="com.myapp" level="ERROR" additivity="false">
+    <logger name="com.momo" level="ERROR" additivity="false">
         <appender-ref ref="ERROR_FILE" />
     </logger>
 

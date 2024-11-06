@@ -12,12 +12,13 @@ import java.util.List;
 public class FmpApi {
     @Resource
     private RestClient restClient;
-    static String apiKey = "rtBlUdMrEgWdwWDahqfYewEPcIxa5jTr";
+    static String API_KEY = "rtBlUdMrEgWdwWDahqfYewEPcIxa5jTr";
+    static String FINANCIAL_MODEL_URL = "https://financialmodelingprep.com/api/v3/search?query=";
 
 
     public List<CompanyStock> searchCompany(String company){
         return  restClient.get()
-                .uri("https://financialmodelingprep.com/api/v3/search?query="+company+"&apikey="+apiKey)
+                .uri(FINANCIAL_MODEL_URL+company+"&apikey="+API_KEY)
                 .retrieve()
                 .body(new ParameterizedTypeReference<>(){});
     }
