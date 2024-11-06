@@ -47,6 +47,8 @@ spring:
           use_second_level_cache: false  # 不使用二級緩存
           use_query_cache: false  # 不使用查詢緩存
   rabbitmq:
+      host: localhost  # 添加 RabbitMQ 主機配置
+      port: 5672      # 添加 RabbitMQ 端口配置
       username: user
       password: password
       connection-timeout: 60000
@@ -103,7 +105,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,metrics,prometheus,rabbitmq
+        include: health,metrics,prometheus
       base-path: /actuator
     enabled-by-default: false
   endpoint:
@@ -135,6 +137,18 @@ management:
             requests: false
     tags:
       application: ${spring.application.name}
-  server:
-    port: 8081
+#  server:
+#    port: 8081
 
+
+aws:
+  region: ap-northeast-1
+  endpoint: http://localhost:4566
+
+
+logging:
+  level:
+    root: INFO
+    org.springframework: DEBUG
+    org.springframework.boot.actuate: DEBUG
+    org.springframework.web: DEBUG
