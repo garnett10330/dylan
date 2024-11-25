@@ -1,8 +1,8 @@
 package com.momo.dylantest.service;
 
 
+import com.momo.dylantest.mapper.mysql.MysqlDBMapper;
 import com.momo.dylantest.model.dto.mysql.P3ReportWeeklyResponseRatioDto;
-import com.momo.dylantest.repository.mysql.P3ReportWeeklyResponseRatioRepository;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import java.util.List;
 @Slf4j
 public class P3reportWeeklyResponseRatioService {
     @Resource
-    private P3ReportWeeklyResponseRatioRepository p3ReportWeeklyResponseRatioRepository;
+    private MysqlDBMapper mysqlDBMapper;
 
     /**
      * 查詢所有的 P3 報告每週回應比例數據。
@@ -28,7 +28,7 @@ public class P3reportWeeklyResponseRatioService {
      * @return 包含所有 P3 報告每週回應比例的列表。
      */
     public List<P3ReportWeeklyResponseRatioDto> findAll(){
-        return p3ReportWeeklyResponseRatioRepository.findAll().stream()
+        return mysqlDBMapper.findAll3PReportWeeklyResponseRatio().stream()
                 .map(P3ReportWeeklyResponseRatioDto::new) // 使用建構子直接轉換
                 .toList();
     }
@@ -39,21 +39,11 @@ public class P3reportWeeklyResponseRatioService {
      * @return 匹配指定工單 ID 的 P3 報告每週回應比例的列表。
      */
     public List<P3ReportWeeklyResponseRatioDto> findByTicketId(String ticketId){
-        return p3ReportWeeklyResponseRatioRepository.findByTicketId(ticketId).stream()
+        return mysqlDBMapper.findByTicketId(ticketId).stream()
                 .map(P3ReportWeeklyResponseRatioDto::new) // 使用建構子直接轉換
                 .toList();
     }
-    /**
-     * 使用 JPQL 根據工單 ID 查詢 P3 報告每週回應比例數據。
-     *
-     * @param ticketId 工單 ID。
-     * @return 匹配指定工單 ID 的 P3 報告每週回應比例的列表。
-     */
-    public List<P3ReportWeeklyResponseRatioDto> findByTicketIdJPQL(String ticketId){
-        return p3ReportWeeklyResponseRatioRepository.findByTicketIdJPQL(ticketId).stream()
-                .map(P3ReportWeeklyResponseRatioDto::new) // 使用建構子直接轉換
-                .toList();
-    }
+
     /**
      * 根據條件自動生成查詢 P3 報告每週回應比例數據。
      *
@@ -63,7 +53,7 @@ public class P3reportWeeklyResponseRatioService {
      * @return 匹配條件的 P3 報告每週回應比例的列表。
      */
     public List<P3ReportWeeklyResponseRatioDto> findByConditions(String entpCode, String goodsCode, Boolean eUnread){
-        return p3ReportWeeklyResponseRatioRepository.findByConditions(entpCode, goodsCode, eUnread).stream()
+        return mysqlDBMapper.findByConditions(entpCode, goodsCode, eUnread).stream()
                 .map(P3ReportWeeklyResponseRatioDto::new) // 使用建構子直接轉換
                 .toList();
     }

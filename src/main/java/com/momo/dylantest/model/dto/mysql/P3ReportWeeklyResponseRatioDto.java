@@ -12,8 +12,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor // 自動生成預設建構子
 public class P3ReportWeeklyResponseRatioDto {
 
-    @Schema(description = "mysql流水號")
-    private Integer sn;  // 使用 Integer 來匹配 int 類型
 
     @Schema(description = "廠編")
     private String entpCode;
@@ -41,7 +39,6 @@ public class P3ReportWeeklyResponseRatioDto {
 
     // 從 P3ReportWeeklyResponseRatioPo 初始化 Dto 的建構子
     public P3ReportWeeklyResponseRatioDto(P3ReportWeeklyResponseRatioPo po) {
-        this.sn = po.getSn();
         this.entpCode = po.getEntpCode();
         this.goodsCode = po.getGoodsCode();
         this.cMsgTime = po.getCMsgTime();

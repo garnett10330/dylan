@@ -56,7 +56,7 @@ public class TestController {
         return Response.success(p3reportWeeklyResponseRatioService.findByTicketId(ticketId));
     }
     /**
-     * 使用 JPQL 根據 Ticket ID 查詢週回應比例數據。
+     * 根據Ticket ID查詢週回應比例數據 有做限制
      *
      * @param ticketId 工單 ID，必須是十位數的格式。
      * @return 匹配指定 Ticket ID 的週回應比例數據列表。{@link Response<java.util.List>}
@@ -65,7 +65,7 @@ public class TestController {
     public Response findByTicketIdJPQL(
             @Pattern(regexp="^[0-9]{10}$", message="ticketId必須是十位數的格式")
             @RequestParam String ticketId){
-        return Response.success(p3reportWeeklyResponseRatioService.findByTicketIdJPQL(ticketId));
+        return Response.success(p3reportWeeklyResponseRatioService.findByTicketId(ticketId));
     }
     /**
      * 根據條件查詢週回應比例數據。

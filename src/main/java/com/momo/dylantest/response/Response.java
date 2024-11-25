@@ -1,6 +1,7 @@
 package com.momo.dylantest.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.momo.dylantest.constant.ResponseCodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,15 +30,15 @@ public class Response<T> {
 
 
     public static <T> Response<T> success(T data) {
-        return new Response<>("OK", 200, data);
+        return new Response<>("OK", ResponseCodeEnum.SUCCESS.getValue(), data);
     }
 
     public static <T> Response<T> success() {
-        return new Response<>("OK", 200, null);
+        return new Response<>("OK", ResponseCodeEnum.SUCCESS.getValue(), null);
     }
 
     public static <T> Response<T> fail(String message){
 
-        return new Response<>(message,-1,null);
+        return new Response<>(message,ResponseCodeEnum.FAIL.getValue(),null);
     }
 }

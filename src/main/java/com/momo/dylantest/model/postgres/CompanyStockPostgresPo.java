@@ -1,41 +1,52 @@
 package com.momo.dylantest.model.postgres;
 
 import com.momo.dylantest.model.dto.api.CompanyStockApiDto;
-import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
-@Entity
 @NoArgsConstructor
-@Table(name = "company_stock")
 public class CompanyStockPostgresPo {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "company_stock_seq")
-    @SequenceGenerator(name = "company_stock_seq", sequenceName = "company_stock_sequence", allocationSize = 1)
+    /**
+     * mysql流水號
+     */
     private Integer id;
 
-    @Column(name = "symbol", nullable = false, length = 225)
+    /**
+     * 股票代號
+     */
     private String symbol;
 
-    @Column(name = "name", nullable = false, length = 225)
+    /**
+     * 股票名稱
+     */
     private String name;
 
-    @Column(name = "stock_exchange", length = 225)
+    /**
+     * 交易所名稱
+     */
     private String stockExchange;
 
-    @Column(name = "exchange_short_name", length = 100)
+    /**
+     * 交易所名稱縮寫
+     */
     private String exchangeShortName;
 
-    @Column(name = "currency", length = 30)
+    /**
+     * 幣值
+     */
     private String currency;
 
-    @Column(name = "gmt_created", nullable = false, insertable = false, columnDefinition = "TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP(3)")
+    /**
+     * 創建時間
+     */
     private LocalDateTime gmtCreated;
 
-    @Column(name = "gmt_modified", nullable = false, insertable = false, columnDefinition = "TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP(3)")
+    /**
+     * 修改時間
+     */
     private LocalDateTime gmtModified;
 
     // 新增建構子，接受 CompanyStockApiDto 作為參數

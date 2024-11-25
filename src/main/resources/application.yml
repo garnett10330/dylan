@@ -21,7 +21,7 @@ spring:
   # 數據源配置
   datasource:
     mysql:
-      jdbc-url: jdbc:mysql://localhost:3306/weitest?allowMultiQueries=true&rewriteBatchedStatements=true&useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=utf8  # MySQL 連接 URL
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/weitest?allowMultiQueries=true&useSSL=false&characterEncoding=utf8&rewriteBatchedStatements=true&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=250&prepStmtCacheSqlLimit=2048&allowPublicKeyRetrieval=true
       username: weichen  # 數據庫用戶名
       password: qwe123  # 數據庫密碼
       driver-class-name: com.mysql.cj.jdbc.Driver  # MySQL 驅動類
@@ -34,7 +34,7 @@ spring:
         max-lifetime: 1800000  # 連接最大生命週期（毫秒）
         connection-timeout: 10000  # 連接超時時間（毫秒）
     postgres:
-      jdbc-url: jdbc:postgresql://localhost:5432/postgres  # postgres 連接 URL
+      jdbc-url: jdbc:postgresql://localhost:5432/postgres?prepareThreshold=3&reWriteBatchedInserts=true
       username: postgres  # 數據庫用戶名
       password: postgres  # 數據庫密碼
       driver-class-name: org.postgresql.Driver  # postgres 驅動類
@@ -46,25 +46,6 @@ spring:
         idle-timeout: 300000  # 空閒連接超時時間（毫秒）
         max-lifetime: 1800000  # 連接最大生命週期（毫秒）
         connection-timeout: 10000  # 連接超時時間（毫秒）
-
-  # JPA 配置
-  jpa:
-    show-sql: false  # 是否顯示 SQL 查詢
-    hibernate:
-      ddl-auto: none  # 不自動更新數據庫結構
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl  # 命名策略，解決表名大小寫問題
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect  # MySQL 方言
-        jdbc:
-          batch_size: 1000  # 批處理大小
-        order_inserts: true  # 批量插入優化
-        order_updates: true  # 批量更新優化
-        generate_statistics: false  # 不生成統計信息
-        cache:
-          use_second_level_cache: false  # 不使用二級緩存
-          use_query_cache: false  # 不使用查詢緩存
   rabbitmq:
       host: localhost  # 添加 RabbitMQ 主機配置
       port: 5672      # 添加 RabbitMQ 端口配置
@@ -169,3 +150,4 @@ aws:
 logging:
   level:
     com.momo.dylan: info
+#    org.mybatis: DEBUG

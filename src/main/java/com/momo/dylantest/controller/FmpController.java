@@ -84,7 +84,7 @@ public class FmpController {
             })
     @PostMapping("/batch/postgres")
     public Response saveAllPostgres(@RequestParam String companyName) throws Exception{
-        companyStockService.insertBatch(companyName);
+        companyStockService.insertBatchForPostgres(companyName);
         return Response.success();
     }
     /**

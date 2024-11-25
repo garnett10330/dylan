@@ -1,44 +1,69 @@
 package com.momo.dylantest.model.mysql;
 
 import com.momo.dylantest.model.dto.api.CompanyStockApiDto;
-import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-
+/**
+ * Company Stock MySQL Pojo
+ * */
 @Data
-@Entity
 @NoArgsConstructor
-@Table(name = "company_stock")
 public class CompanyStockMysqlPo {
-    /**  `id` int NOT NULL AUTO_INCREMENT COMMENT 'mysql流水號',
-     `symbol` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '股票代號',
-     `name` varchar(225) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '股票名稱',
-     `stockExchange` varchar(225) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '交易所名稱',
-     `exchangeShortName` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '交易所名稱縮寫',
-     `currency` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '幣值',
-     `gmt_created` timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-     `gmt_modified`
+    /**
+     * Company Stock MySQL Pojo
+     *
+     * 對應資料表欄位與註解如下：
+     * `id` int NOT NULL AUTO_INCREMENT COMMENT 'mysql流水號',
+     * `symbol` varchar(10) COMMENT '股票代號',
+     * `name` varchar(225) COMMENT '股票名稱',
+     * `stock_exchange` varchar(225) COMMENT '交易所名稱',
+     * `exchange_short_name` varchar(100) NOT NULL COMMENT '交易所名稱縮寫',
+     * `currency` varchar(30) NOT NULL COMMENT '幣值',
+     * `gmt_created` timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+     * `gmt_modified` timestamp(3) DEFAULT NULL
      */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    /**
+     * mysql流水號
+     */
     private Integer id;
 
-    @Column(name = "symbol")
+    /**
+     * 股票代號
+     */
     private String symbol;
-    @Column(name = "name")
+
+    /**
+     * 股票名稱
+     */
     private String name;
-    @Column(name = "stock_exchange")
+
+    /**
+     * 交易所名稱
+     */
     private String stockExchange;
-    @Column(name = "exchange_short_name")
+
+    /**
+     * 交易所名稱縮寫
+     */
     private String exchangeShortName;
-    @Column(name = "currency")
+
+    /**
+     * 幣值
+     */
     private String currency;
-    @Column(name = "gmt_created")
+
+    /**
+     * 創建時間
+     */
     private LocalDateTime gmtCreated;
-    @Column(name = "gmt_modified")
+
+    /**
+     * 修改時間
+     */
     private LocalDateTime gmtModified;
+
 
     // 新增建構子，接受 CompanyStockApiDto 作為參數
     public CompanyStockMysqlPo(CompanyStockApiDto dto) {
@@ -50,4 +75,5 @@ public class CompanyStockMysqlPo {
         this.gmtCreated = dto.getGmtCreated();
         this.gmtModified = dto.getGmtModified();
     }
+
 }
