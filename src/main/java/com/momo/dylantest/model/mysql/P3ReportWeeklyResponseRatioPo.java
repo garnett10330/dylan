@@ -1,4 +1,4 @@
-package com.momo.dylantest.model;
+package com.momo.dylantest.model.mysql;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "3Preport_weekly_response_ratio")
-public class P3ReportWeeklyResponseRatio {
+public class P3ReportWeeklyResponseRatioPo {
     /**`sn` int(11) NOT NULL AUTO_INCREMENT COMMENT 'mysql流水號',
      `entpcode` varchar(10) DEFAULT NULL COMMENT '廠編',
      `goodscode` varchar(10) DEFAULT NULL COMMENT '品編',

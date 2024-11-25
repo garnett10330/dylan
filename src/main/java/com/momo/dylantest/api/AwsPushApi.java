@@ -1,6 +1,6 @@
 package com.momo.dylantest.api;
 
-import com.momo.dylantest.model.CompanyStock;
+import com.momo.dylantest.model.mysql.CompanyStockMysqlPo;
 import jakarta.annotation.Resource;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ public class AwsPushApi {
     static String apiKey = "rtBlUdMrEgWdwWDahqfYewEPcIxa5jTr";
 
 
-    public List<CompanyStock> searchCompany(String company){
+    public List<CompanyStockMysqlPo> searchCompany(String company){
         return  restClient.get()
                 .uri("https://financialmodelingprep.com/api/v3/search?query="+company+"&apikey="+apiKey)
                 .retrieve()

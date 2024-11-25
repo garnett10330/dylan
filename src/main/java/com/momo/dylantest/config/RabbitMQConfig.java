@@ -3,6 +3,8 @@ package com.momo.dylantest.config;
 import com.momo.dylantest.configProperties.RabbitMQConfigProperties;
 import jakarta.annotation.Resource;
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,7 +17,7 @@ public class RabbitMQConfig {
         return QueueBuilder.durable(rabbitMQConfigProperties.getNormalQueue())
                 .withArgument("x-dead-letter-exchange", rabbitMQConfigProperties.getDlxExchangeName())  // 指定死信交换机
                 .withArgument("x-dead-letter-routing-key", rabbitMQConfigProperties.getDlqQueue())  // 指定死信路由键
-                .withArgument("x-message-ttl", 5000)  // 消息在5秒后过期
+                //.withArgument("x-message-ttl", 5000)  // 消息在5秒后过期
                 .build();
     }
     // 无死信队列的普通队列
@@ -58,5 +60,19 @@ public class RabbitMQConfig {
     @Bean
     public Binding dlqBinding(Queue deadLetterQueue, DirectExchange dlxExchange) {
         return BindingBuilder.bind(deadLetterQueue).to(dlxExchange).with(deadLetterQueue.getName());
+    }
+
+    @Bean
+    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
+        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+        rabbitTemplate.setMandatory(true);
+        rabbitTemplate.setConfirmCallback((correlationData, ack, cause) -> {
+            if (ack) {
+                System.out.println("Message sent successfully: " + correlationData);
+            } else {
+                System.err.println("Message failed to send: " + cause);
+            }
+        });
+        return rabbitTemplate;
     }
 }

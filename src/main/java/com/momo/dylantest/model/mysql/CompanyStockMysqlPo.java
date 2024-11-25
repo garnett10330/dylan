@@ -1,14 +1,17 @@
-package com.momo.dylantest.model;
+package com.momo.dylantest.model.mysql;
 
+import com.momo.dylantest.model.dto.api.CompanyStockApiDto;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
 @Entity
+@NoArgsConstructor
 @Table(name = "company_stock")
-public class CompanyStock {
+public class CompanyStockMysqlPo {
     /**  `id` int NOT NULL AUTO_INCREMENT COMMENT 'mysql流水號',
      `symbol` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '股票代號',
      `name` varchar(225) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '股票名稱',
@@ -36,4 +39,15 @@ public class CompanyStock {
     private LocalDateTime gmtCreated;
     @Column(name = "gmt_modified")
     private LocalDateTime gmtModified;
+
+    // 新增建構子，接受 CompanyStockApiDto 作為參數
+    public CompanyStockMysqlPo(CompanyStockApiDto dto) {
+        this.symbol = dto.getSymbol();
+        this.name = dto.getName();
+        this.stockExchange = dto.getStockExchange();
+        this.exchangeShortName = dto.getExchangeShortName();
+        this.currency = dto.getCurrency();
+        this.gmtCreated = dto.getGmtCreated();
+        this.gmtModified = dto.getGmtModified();
+    }
 }

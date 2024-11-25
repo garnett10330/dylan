@@ -4,7 +4,12 @@
 # 服務器配置
 server:
   port: 8650  # 應用程序運行的端口
-
+  tomcat:
+    max-connections: 1000
+    max-threads: 100
+    accept-count: 300
+    maxSpareThreads: 100
+    minSpareThreads: 500
 # Spring 相關配置
 spring:
   application:
@@ -15,18 +20,32 @@ spring:
 
   # 數據源配置
   datasource:
-    url: jdbc:mysql://localhost:3306/weitest?allowMultiQueries=true&rewriteBatchedStatements=true&useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=utf8  # MySQL 連接 URL
-    username: weichen  # 數據庫用戶名
-    password: qwe123  # 數據庫密碼
-    driver-class-name: com.mysql.cj.jdbc.Driver  # MySQL 驅動類
-    hikari:  # HikariCP 連接池配置
-      connection-test-query: SELECT 1
-      pool-name: HikariPool-MySQL
-      maximum-pool-size: 200  # 最大連接數
-      minimum-idle: 5  # 最小空閒連接數
-      idle-timeout: 300000  # 空閒連接超時時間（毫秒）
-      max-lifetime: 1800000  # 連接最大生命週期（毫秒）
-      connection-timeout: 10000  # 連接超時時間（毫秒）
+    mysql:
+      jdbc-url: jdbc:mysql://localhost:3306/weitest?allowMultiQueries=true&rewriteBatchedStatements=true&useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=utf8  # MySQL 連接 URL
+      username: weichen  # 數據庫用戶名
+      password: qwe123  # 數據庫密碼
+      driver-class-name: com.mysql.cj.jdbc.Driver  # MySQL 驅動類
+      hikari:  # HikariCP 連接池配置
+        connection-test-query: SELECT 1
+        pool-name: HikariPool-MySQL
+        maximum-pool-size: 20  # 最大連接數
+        minimum-idle: 5  # 最小空閒連接數
+        idle-timeout: 300000  # 空閒連接超時時間（毫秒）
+        max-lifetime: 1800000  # 連接最大生命週期（毫秒）
+        connection-timeout: 10000  # 連接超時時間（毫秒）
+    postgres:
+      jdbc-url: jdbc:postgresql://localhost:5432/postgres  # postgres 連接 URL
+      username: postgres  # 數據庫用戶名
+      password: postgres  # 數據庫密碼
+      driver-class-name: org.postgresql.Driver  # postgres 驅動類
+      hikari: # HikariCP 連接池配置
+        connection-test-query: SELECT 1
+        pool-name: HikariPool-Postgres
+        maximum-pool-size: 20  # 最大連接數
+        minimum-idle: 5  # 最小空閒連接數
+        idle-timeout: 300000  # 空閒連接超時時間（毫秒）
+        max-lifetime: 1800000  # 連接最大生命週期（毫秒）
+        connection-timeout: 10000  # 連接超時時間（毫秒）
 
   # JPA 配置
   jpa:
@@ -39,7 +58,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect  # MySQL 方言
         jdbc:
-          batch_size: 100  # 批處理大小
+          batch_size: 1000  # 批處理大小
         order_inserts: true  # 批量插入優化
         order_updates: true  # 批量更新優化
         generate_statistics: false  # 不生成統計信息
@@ -62,8 +81,9 @@ spring:
       listener:
         simple:
           acknowledge-mode: manual
-          concurrency: 5 # 消费端的监听个数(即@RabbitListener开启几个线程去处理数据。)
+          concurrency: 10 # 消费端的监听个数(即@RabbitListener开启几个线程去处理数据。)
           max-concurrency: 50 # 消费端的监听最大个数
+          #prefetch: 1 # 每個消費者最多同時處理5條消息
         retry:
           enabled: true
           initial-interval: 1000
@@ -148,7 +168,4 @@ aws:
 
 logging:
   level:
-    root: INFO
-    org.springframework: DEBUG
-    org.springframework.boot.actuate: DEBUG
-    org.springframework.web: DEBUG
+    com.momo.dylan: info

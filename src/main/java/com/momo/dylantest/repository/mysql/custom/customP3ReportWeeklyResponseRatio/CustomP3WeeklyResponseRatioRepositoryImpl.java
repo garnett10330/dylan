@@ -1,6 +1,6 @@
-package com.momo.dylantest.repository.custom.customP3ReportWeeklyResponseRatio;
+package com.momo.dylantest.repository.mysql.custom.customP3ReportWeeklyResponseRatio;
 
-import com.momo.dylantest.model.P3ReportWeeklyResponseRatio;
+import com.momo.dylantest.model.mysql.P3ReportWeeklyResponseRatioPo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 
@@ -12,7 +12,7 @@ public class CustomP3WeeklyResponseRatioRepositoryImpl implements CustomP3Weekly
         this.entityManager = entityManager;
     }
     @Override
-    public List<P3ReportWeeklyResponseRatio> findByConditions(String entpCode, String goodsCode, Boolean eUnread) {
+    public List<P3ReportWeeklyResponseRatioPo> findByConditions(String entpCode, String goodsCode, Boolean eUnread) {
         StringBuilder sql = new StringBuilder("SELECT * FROM `3Preport_weekly_response_ratio` WHERE 1=1");
 
         if (entpCode != null && !entpCode.isEmpty()) {
@@ -27,7 +27,7 @@ public class CustomP3WeeklyResponseRatioRepositoryImpl implements CustomP3Weekly
             sql.append(" AND e_unread = :eUnread");
         }
 
-        Query query = entityManager.createNativeQuery(sql.toString(), P3ReportWeeklyResponseRatio.class);
+        Query query = entityManager.createNativeQuery(sql.toString(), P3ReportWeeklyResponseRatioPo.class);
 
         if (entpCode != null && !entpCode.isEmpty()) {
             query.setParameter("entpCode", entpCode);

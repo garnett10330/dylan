@@ -13,6 +13,8 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Random;
+
 @Slf4j
 @Service
 public class MessageReceiver {
@@ -42,6 +44,9 @@ public class MessageReceiver {
     @RabbitListener(queues = "#{rabbitMQConfigProperties.noDlqQueue}")
     public void receiveNoDlqQueue(Message message, @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag, Channel channel) throws Exception {
         try {
+            Random random = new Random();
+            int sleepTime = 50 + random.nextInt(251); // 產生 100 到 300 毫秒之間的隨機時間
+            Thread.sleep(sleepTime);
             String msg = new String(message.getBody());
             log.info(LogUtil.info(LogUtil.GATE_FRONT,"receiveNoDlqQueue","消費訊息:"+msg));
             // 处理消息后手动ACK
