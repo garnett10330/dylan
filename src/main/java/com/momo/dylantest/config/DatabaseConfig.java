@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Primary;
 import javax.sql.DataSource;
 
 @Configuration
-public class DatabaseConfiguration {
+public class DatabaseConfig {
     public static final String MYSQL_DATASOURCE = "MysqlDS";
     public static final String POSTGRES_DATASOURCE = "PostgresDS";
 

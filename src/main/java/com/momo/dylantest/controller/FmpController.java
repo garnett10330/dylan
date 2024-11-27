@@ -1,7 +1,9 @@
 package com.momo.dylantest.controller;
 
-import com.momo.dylantest.model.PageResult;
+import com.momo.dylantest.model.PageVo;
 import com.momo.dylantest.model.dto.CompanyStockDto;
+import com.momo.dylantest.model.request.BasePageReq;
+import com.momo.dylantest.model.request.StockSymbolSearchReq;
 import com.momo.dylantest.response.Response;
 import com.momo.dylantest.service.CompanyStockService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -42,31 +45,39 @@ public class FmpController {
                     @ApiResponse(responseCode = "500", description = "伺服器錯誤", content = @Content)
             })
     @PostMapping("/batch/mysql")
-    public Response saveAllMysql(@RequestParam String companyName) throws Exception{
+    public Response<String> saveAllMysql(@RequestParam String companyName) throws Exception{
         companyStockService.insertBatchForMysql(companyName);
         return Response.success();
     }
     /**
      * 分頁獲取 MySQL 中的公司股票數據。
      *
-     * @param page 當前頁碼，默認為 0。
-     * @param size 每頁的大小，默認為 10。
-     * @return 包含公司股票數據的分頁結果。{@link Response<com.momo.dylantest.model.PageResult<CompanyStockDto>>}
+     * @param req 包含分頁信息的請求物件 {@link BasePageReq}，其中包含以下內容：
+     *            <ul>
+     *                <li>page - 請求的頁碼（從 1 開始）。</li>
+     *                <li>size - 每頁顯示的數據條數。</li>
+     *            </ul>
+     * @return 包含公司股票數據的分頁結果。
+     * 返回值為 {@link Response}，其中封裝了 {@link PageVo}。
+     *  *         {@link PageVo} 包含分頁信息和 {@link CompanyStockDto} 的數據列表。
      */
-    @Operation(summary = "分頁獲取 MySQL 中的公司股票數據",
-            description = "根據頁碼與頁大小，分頁查詢 MySQL 中的公司股票數據。",
+    @Operation(summary = "分頁獲取 mysql 中的公司股票數據",
+            description = "根據頁碼與頁大小，分頁查詢 PostgreSQL 中的公司股票數據。",
             parameters = {
-                    @Parameter(name = "page", description = "當前頁碼，默認為 0", required = false),
-                    @Parameter(name = "size", description = "每頁大小，默認為 10", required = false)
+                    @Parameter(name = "pageNum", description = "當前頁碼，默認為 1", required = false),
+                    @Parameter(name = "pageSize", description = "每頁大小，默認為 10", required = false)
             },
             responses = {
-                    @ApiResponse(responseCode = "200", description = "查詢成功", content = @Content(schema = @Schema(implementation = PageResult.class))),
-                    @ApiResponse(responseCode = "500", description = "伺服器錯誤", content = @Content)
+                    @ApiResponse(responseCode = "200", description = "查詢成功",
+                            content = @Content(schema = @Schema(implementation = PageVo.class))),
+                    @ApiResponse(responseCode = "400", description = "參數錯誤",
+                            content = @Content),
+                    @ApiResponse(responseCode = "500", description = "伺服器錯誤",
+                            content = @Content)
             })
     @GetMapping("/mysql")
-    public Response getStocksMysql(@RequestParam(defaultValue = "0") int page,
-                                             @RequestParam(defaultValue = "10") int size) {
-        return Response.success(companyStockService.getAllStocksWithPageMysql(page, size));
+    public Response<PageVo<CompanyStockDto>> getStocksMysql(BasePageReq req) {
+        return Response.success(companyStockService.getAllStocksWithPageMysql(req));
     }
     /**
      * 批量保存公司股票數據到 PostgreSQL。
@@ -83,31 +94,79 @@ public class FmpController {
                     @ApiResponse(responseCode = "500", description = "伺服器錯誤", content = @Content)
             })
     @PostMapping("/batch/postgres")
-    public Response saveAllPostgres(@RequestParam String companyName) throws Exception{
+    public Response<String> saveAllPostgres(@RequestParam String companyName) throws Exception{
         companyStockService.insertBatchForPostgres(companyName);
         return Response.success();
     }
     /**
      * 分頁獲取 PostgreSQL 中的公司股票數據。
      *
-     * @param page 當前頁碼，默認為 0。
-     * @param size 每頁的大小，默認為 10。
-     * @return 包含公司股票數據的分頁結果。{@link Response<com.momo.dylantest.model.PageResult<CompanyStockDto>>}
+     * @param req 包含分頁信息的請求物件 {@link BasePageReq}，其中包含以下內容：
+     *            <ul>
+     *                <li>page - 請求的頁碼（從 1 開始）。</li>
+     *                <li>size - 每頁顯示的數據條數。</li>
+     *            </ul>
+     * @return 包含公司股票數據的分頁結果。
+     * 返回值為 {@link Response}，其中封裝了 {@link PageVo}。
+     *  *         {@link PageVo} 包含分頁信息和 {@link CompanyStockDto} 的數據列表。
      */
     @Operation(summary = "分頁獲取 PostgreSQL 中的公司股票數據",
             description = "根據頁碼與頁大小，分頁查詢 PostgreSQL 中的公司股票數據。",
             parameters = {
-                    @Parameter(name = "page", description = "當前頁碼，默認為 0", required = false),
-                    @Parameter(name = "size", description = "每頁大小，默認為 10", required = false)
+                    @Parameter(name = "pageNum", description = "當前頁碼，默認為 1", required = false),
+                    @Parameter(name = "pageSize", description = "每頁大小，默認為 10", required = false)
             },
             responses = {
-                    @ApiResponse(responseCode = "200", description = "查詢成功", content = @Content(schema = @Schema(implementation = PageResult.class))),
-                    @ApiResponse(responseCode = "500", description = "伺服器錯誤", content = @Content)
+                    @ApiResponse(responseCode = "200", description = "查詢成功",
+                            content = @Content(schema = @Schema(implementation = PageVo.class))),
+                    @ApiResponse(responseCode = "400", description = "參數錯誤",
+                            content = @Content),
+                    @ApiResponse(responseCode = "500", description = "伺服器錯誤",
+                            content = @Content)
             })
     @GetMapping("/postgres")
-    public Response getStocksPostgres(@RequestParam(defaultValue = "0") int page,
-                                                     @RequestParam(defaultValue = "10") int size) {
-        return Response.success(companyStockService.getAllStocksWithPagePostgres(page, size));
+    public Response<PageVo<CompanyStockDto>> getStocksPostgres(BasePageReq req) {
+        return Response.success(companyStockService.getAllStocksWithPagePostgres(req));
+    }
+
+
+    /**
+     * 根據股票代號（symbol）和分頁條件查詢公司股票數據。
+     * <p>
+     * 該方法接受 JSON 格式的查詢參數，支持根據股票代號進行模糊匹配，
+     * 並按照分頁條件返回匹配的數據列表。
+     * </p>
+     *
+     * @param req 包含 symbol、pageNum 和 pageSize 的請求參數 {@link StockSymbolSearchReq}。
+     *            <ul>
+     *                <li>{@code symbol} - 股票代號（必填）。</li>
+     *                <li>{@code pageNum} - 頁碼（默認為 1）。</li>
+     *                <li>{@code pageSize} - 每頁條數（默認為 10）。</li>
+     *            </ul>
+     * @return 包裝在 {@link PageVo} 中的分頁結果。
+     *         返回值類型為 {@link Response}<{@link PageVo}<{@link CompanyStockDto}>>。
+     */
+    @Operation(
+            summary = "查詢公司股票數據",
+            description = "根據股票代號（symbol）和分頁條件查詢公司股票數據，symbol 不可為空。",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "包含股票代號（symbol）和分頁條件的查詢請求",
+                    required = true,
+                    content = @Content(schema = @Schema(implementation = StockSymbolSearchReq.class))
+            ),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "查詢成功",
+                            content = @Content(schema = @Schema(implementation = PageVo.class))
+                    ),
+                    @ApiResponse(responseCode = "400", description = "參數錯誤"),
+                    @ApiResponse(responseCode = "500", description = "伺服器錯誤")
+            }
+    )
+    @PostMapping("/search")
+    public Response<PageVo<CompanyStockDto>> searchStocks(@RequestBody @Valid StockSymbolSearchReq req) {
+        return Response.success(companyStockService.findStocksBySymbolWithPage(req));
     }
 
 

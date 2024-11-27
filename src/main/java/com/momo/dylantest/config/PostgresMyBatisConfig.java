@@ -15,13 +15,13 @@ import javax.sql.DataSource;
  * @author wei
  */
 @Configuration
-@MapperScan(basePackages = "com.momo.dylantest.mapper.postgres", sqlSessionFactoryRef = "postgresSessionFactory")
+@MapperScan(basePackages = "com.momo.dylantest.mapper.postgres", sqlSessionFactoryRef = PostgresMyBatisConfig.POSTGRES_SESSION_FACTORY)
 public class PostgresMyBatisConfig {
-    private static final String POSTGRES_SESSION_FACTORY = "postgresSessionFactory";
-    private static final String POSTGRES_TRANSACTION_MANAGER = "postgresTransactionManager";
+    public static final String POSTGRES_SESSION_FACTORY = "postgresSessionFactory";
+    public static final String POSTGRES_TRANSACTION_MANAGER = "postgresTransactionManager";
 
     @Bean(name = POSTGRES_SESSION_FACTORY,destroyMethod = "")
-    public SqlSessionFactoryBean postgresSqlSessionFactory(@Qualifier (DatabaseConfiguration.POSTGRES_DATASOURCE) final DataSource postgresDataSource)throws Exception{
+    public SqlSessionFactoryBean postgresSqlSessionFactory(@Qualifier (DatabaseConfig.POSTGRES_DATASOURCE) final DataSource postgresDataSource)throws Exception{
         final SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
 //        String password = AESUtil.druidDecrypt(publicKey, ((HikariDataSource) postgresDataSource).getPassword());
 //        ((HikariDataSource) postgresDataSource).setPassword(password);
@@ -42,7 +42,7 @@ public class PostgresMyBatisConfig {
         return factoryBean;
     }
     @Bean(name = POSTGRES_TRANSACTION_MANAGER)
-    public DataSourceTransactionManager postgresTransactionManager(@Qualifier(DatabaseConfiguration.POSTGRES_DATASOURCE) DataSource postgresDataSource) {
+    public DataSourceTransactionManager postgresTransactionManager(@Qualifier(DatabaseConfig.POSTGRES_DATASOURCE) DataSource postgresDataSource) {
         return new DataSourceTransactionManager(postgresDataSource);
     }
 }

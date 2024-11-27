@@ -2,11 +2,10 @@ package com.momo.dylantest.mapper.mysql;
 
 import com.momo.dylantest.model.mysql.P3ReportWeeklyResponseRatioPo;
 import org.apache.ibatis.annotations.*;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
-@Mapper
-@Component
+
+
 public interface P3ReportWeeklyResponseRatioMapper {
     /**`sn` int(11) NOT NULL AUTO_INCREMENT COMMENT 'mysql流水號',
      `entpcode` varchar(10) DEFAULT NULL COMMENT '廠編',

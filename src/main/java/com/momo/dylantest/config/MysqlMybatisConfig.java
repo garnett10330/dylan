@@ -13,14 +13,14 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import javax.sql.DataSource;
 
 @Configuration
-@MapperScan(basePackages = "com.momo.dylantest.mapper.mysql", sqlSessionFactoryRef = "mysqlSessionFactory")
+@MapperScan(basePackages = "com.momo.dylantest.mapper.mysql", sqlSessionFactoryRef = MysqlMybatisConfig.MYSQL_SESSION_FACTORY)
 public class MysqlMybatisConfig {
-    private static final String MYSQL_SESSION_FACTORY = "mysqlSessionFactory";
-    private static final String MYSQL_TRANSACTION_MANAGER = "mysqlTransactionManager";
+    public static final String MYSQL_SESSION_FACTORY = "mysqlSessionFactory";
+    public static final String MYSQL_TRANSACTION_MANAGER = "mysqlTransactionManager";
 
     @Bean(name = MYSQL_SESSION_FACTORY,destroyMethod = "")
     @Primary
-    public SqlSessionFactoryBean mysqlSqlSessionFactory(@Qualifier(DatabaseConfiguration.MYSQL_DATASOURCE) final DataSource mysqlDataSource)throws Exception{
+    public SqlSessionFactoryBean mysqlSqlSessionFactory(@Qualifier(DatabaseConfig.MYSQL_DATASOURCE) final DataSource mysqlDataSource)throws Exception{
         final SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
 //        String password = AESUtil.druidDecrypt(publicKey, ((HikariDataSource) mysqlDataSource).getPassword());
 //        ((HikariDataSource) mysqlDataSource).setPassword(password);
@@ -42,7 +42,7 @@ public class MysqlMybatisConfig {
     }
 
     @Bean(name = MYSQL_TRANSACTION_MANAGER)
-    public DataSourceTransactionManager mysqlTransactionManager(@Qualifier(DatabaseConfiguration.MYSQL_DATASOURCE) DataSource mysqlDataSource) {
+    public DataSourceTransactionManager mysqlTransactionManager(@Qualifier(DatabaseConfig.MYSQL_DATASOURCE) DataSource mysqlDataSource) {
         return new DataSourceTransactionManager(mysqlDataSource);
     }
 }
