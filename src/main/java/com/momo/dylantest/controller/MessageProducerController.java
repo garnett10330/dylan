@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
  * 測試使用，用於將消息發送到普通對列或無死信對列。
  */
 @RestController
-@RequestMapping("/v1/message")
+@RequestMapping("/api/message")
 public class MessageProducerController {
 
     @Resource
@@ -43,7 +43,7 @@ public class MessageProducerController {
                     @ApiResponse(responseCode = "500", description = "伺服器錯誤")
             }
     )
-    @PostMapping("/queue/normal")
+    @PostMapping("/queue/normal/v1")
     public Response<String> sendToNormal(@RequestParam String message) {
         CompanyStockMysqlPo companyStock = new CompanyStockMysqlPo();
         companyStock.setId(12345);
@@ -69,7 +69,7 @@ public class MessageProducerController {
                     @ApiResponse(responseCode = "500", description = "伺服器錯誤")
             }
     )
-    @PostMapping("/queue/no-dlq")
+    @PostMapping("/queue/no-dlq/v1")
     public Response<String> sendToNoDlq(@RequestParam String message) {
         return Response.success(messageService.sendToNoDlq(message));
     }
@@ -91,7 +91,7 @@ public class MessageProducerController {
                     @ApiResponse(responseCode = "500", description = "伺服器錯誤")
             }
     )
-    @PostMapping("/queue/no-dlq/batch")
+    @PostMapping("/queue/no-dlq/batch/v1")
     public Response<String> sendMutiToNoDlq(@RequestParam String message) {
         return Response.success(messageService.sendMutiToNoDlq(message));
     }

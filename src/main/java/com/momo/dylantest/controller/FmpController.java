@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @Slf4j
 @RestController
-@RequestMapping("/v1/stocks")
+@RequestMapping("/api/stocks")
 @Tag(name = "公司股票管理", description = "提供批量保存與分頁查詢的 API")
 public class FmpController {
 
@@ -44,7 +44,7 @@ public class FmpController {
                     @ApiResponse(responseCode = "200", description = "查詢成功", content = @Content(schema = @Schema(implementation = Response.class))),
                     @ApiResponse(responseCode = "500", description = "伺服器錯誤", content = @Content)
             })
-    @PostMapping("/batch/mysql")
+    @PostMapping("/batch/mysql/v1")
     public Response<String> saveAllMysql(@RequestParam String companyName) throws Exception{
         companyStockService.insertBatchForMysql(companyName);
         return Response.success();
@@ -75,7 +75,7 @@ public class FmpController {
                     @ApiResponse(responseCode = "500", description = "伺服器錯誤",
                             content = @Content)
             })
-    @GetMapping("/mysql")
+    @GetMapping("/mysql/v1")
     public Response<PageVo<CompanyStockDto>> getStocksMysql(BasePageReq req) {
         return Response.success(companyStockService.getAllStocksWithPageMysql(req));
     }
@@ -93,7 +93,7 @@ public class FmpController {
                     @ApiResponse(responseCode = "200", description = "保存成功", content = @Content(schema = @Schema(implementation = Response.class))),
                     @ApiResponse(responseCode = "500", description = "伺服器錯誤", content = @Content)
             })
-    @PostMapping("/batch/postgres")
+    @PostMapping("/batch/postgres/v1")
     public Response<String> saveAllPostgres(@RequestParam String companyName) throws Exception{
         companyStockService.insertBatchForPostgres(companyName);
         return Response.success();
@@ -124,14 +124,16 @@ public class FmpController {
                     @ApiResponse(responseCode = "500", description = "伺服器錯誤",
                             content = @Content)
             })
-    @GetMapping("/postgres")
+    @GetMapping("/postgres/v1")
     public Response<PageVo<CompanyStockDto>> getStocksPostgres(BasePageReq req) {
         return Response.success(companyStockService.getAllStocksWithPagePostgres(req));
     }
 
 
     /**
+     *
      * 根據股票代號（symbol）和分頁條件查詢公司股票數據。
+     *
      * <p>
      * 該方法接受 JSON 格式的查詢參數，支持根據股票代號進行模糊匹配，
      * 並按照分頁條件返回匹配的數據列表。
@@ -149,22 +151,13 @@ public class FmpController {
     @Operation(
             summary = "查詢公司股票數據",
             description = "根據股票代號（symbol）和分頁條件查詢公司股票數據，symbol 不可為空。",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "包含股票代號（symbol）和分頁條件的查詢請求",
-                    required = true,
-                    content = @Content(schema = @Schema(implementation = StockSymbolSearchReq.class))
-            ),
             responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "查詢成功",
-                            content = @Content(schema = @Schema(implementation = PageVo.class))
-                    ),
+                    @ApiResponse(responseCode = "200", description = "查詢成功"),
                     @ApiResponse(responseCode = "400", description = "參數錯誤"),
                     @ApiResponse(responseCode = "500", description = "伺服器錯誤")
             }
     )
-    @PostMapping("/search")
+    @PostMapping("/search/v1")
     public Response<PageVo<CompanyStockDto>> searchStocks(@RequestBody @Valid StockSymbolSearchReq req) {
         return Response.success(companyStockService.findStocksBySymbolWithPage(req));
     }

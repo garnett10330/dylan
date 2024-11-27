@@ -24,7 +24,7 @@ import java.util.List;
 @Validated
 @Slf4j
 @RestController
-@RequestMapping("/v1/weeklyRatios")
+@RequestMapping("/api/weeklyRatios")
 public class TestController {
 
     @Resource
@@ -47,7 +47,7 @@ public class TestController {
                     @ApiResponse(responseCode = "500", description = "伺服器錯誤")
             }
     )
-    @GetMapping
+    @GetMapping("/v1")
     public Response<List<P3ReportWeeklyResponseRatioDto>> findAll(){
         return Response.success(p3reportWeeklyResponseRatioService.findAll());
     }
@@ -71,7 +71,7 @@ public class TestController {
                     @ApiResponse(responseCode = "500", description = "伺服器錯誤")
             }
     )
-    @GetMapping(params = "ticketId")
+    @GetMapping(path="/v1",params = "ticketId")
     public Response<List<P3ReportWeeklyResponseRatioDto>> findByTicketId(@RequestParam String ticketId){
         return Response.success(p3reportWeeklyResponseRatioService.findByTicketId(ticketId));
     }
@@ -101,7 +101,7 @@ public class TestController {
                     @ApiResponse(responseCode = "500", description = "伺服器錯誤")
             }
     )
-    @GetMapping(path = "/vaildtest",params = "ticketId")
+    @GetMapping(path = "/vaildtest/v1",params = "ticketId")
     public Response<List<P3ReportWeeklyResponseRatioDto>> findByTicketIdJPQL(
             @Pattern(regexp="^[0-9]{10}$", message="ticketId必須是十位數的格式")
             @RequestParam String ticketId){
@@ -133,12 +133,12 @@ public class TestController {
             },
             responses = {
                     @ApiResponse(responseCode = "200", description = "查詢成功",
-                            content = @Content(schema = @Schema(implementation = P3ReportWeeklyResponseRatioDto.class))),
+                            content = @Content(schema = @Schema(implementation = Response.class))),
                     @ApiResponse(responseCode = "400", description = "參數錯誤"),
                     @ApiResponse(responseCode = "500", description = "伺服器錯誤")
             }
     )
-    @GetMapping("/conditions")
+    @GetMapping("/conditions/v1")
     public Response<List<P3ReportWeeklyResponseRatioDto>> findByConditions(@Valid ReportWeeklyConditionReq req) {
         return Response.success(p3reportWeeklyResponseRatioService.findByConditions(req));
     }

@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
 @RestController
-@RequestMapping("/v1/test")
+@RequestMapping("/api/test")
 public class RedisController {
 
     @Resource
@@ -46,7 +46,7 @@ public class RedisController {
                     @ApiResponse(responseCode = "500", description = "伺服器錯誤")
             }
     )
-    @PostMapping("/redis/object")
+    @PostMapping("/redis/object/v1")
     public Response<String> setValue(@RequestParam String key, @RequestParam String data) {
         CompanyStockMysqlPo companyStock = new CompanyStockMysqlPo();
         companyStock.setId(12345);
@@ -83,7 +83,7 @@ public class RedisController {
                     @ApiResponse(responseCode = "500", description = "伺服器錯誤")
             }
     )
-    @GetMapping("/redis/object")
+    @GetMapping("/redis/object/v1")
     public Response<Object> getObjectValue(@RequestParam String key) {
         return Response.success(redisTemplate.opsForValue().get(key));
     }

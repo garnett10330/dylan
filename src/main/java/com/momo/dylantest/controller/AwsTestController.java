@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 該控制器負責與 AWS S3 的交互，提供文件上傳功能。
  */
 @RestController
-@RequestMapping("/aws")
+@RequestMapping("/api/aws")
 public class AwsTestController {
 
     @Resource
@@ -27,7 +27,7 @@ public class AwsTestController {
      * @return 成功上傳文件的回應信息。{@link Response<String>}
      * @throws Exception 如果上傳過程中發生錯誤。
      */
-    @PostMapping("/upload")
+    @PostMapping("/upload/v1")
     public Response uploadFile(@RequestParam String filePath) throws Exception {
         s3Service.uploadFile(BUCKET_NAME_TEST, filePath);
         return Response.success("File uploaded successfully!");
