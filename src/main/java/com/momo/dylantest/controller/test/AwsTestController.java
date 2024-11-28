@@ -1,7 +1,12 @@
-package com.momo.dylantest.controller;
+package com.momo.dylantest.controller.test;
 
 import com.momo.dylantest.response.Response;
+import com.momo.dylantest.response.swagger.ErrorResponse;
 import com.momo.dylantest.service.S3Service;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +32,13 @@ public class AwsTestController {
      * @return 成功上傳文件的回應信息。{@link Response<String>}
      * @throws Exception 如果上傳過程中發生錯誤。
      */
+    @Operation(
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "500", description = "ERROR",
+                            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            }
+    )
     @PostMapping("/upload/v1")
     public Response uploadFile(@RequestParam String filePath) throws Exception {
         s3Service.uploadFile(BUCKET_NAME_TEST, filePath);

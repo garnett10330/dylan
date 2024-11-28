@@ -34,9 +34,7 @@ public class P3reportWeeklyResponseRatioService {
      *         返回值類型為 {@link List}<{@link P3ReportWeeklyResponseRatioDto}>。
      */
     public List<P3ReportWeeklyResponseRatioDto> findAll(){
-        return mysqlDBMapper.findAll3PReportWeeklyResponseRatio().stream()
-                .map(P3ReportWeeklyResponseRatioDto::new) // 使用建構子直接轉換
-                .toList();
+        return mysqlDBMapper.findAll3PReportWeeklyResponseRatio();
     }
     /**
      * 使用原生 SQL 根據工單 ID 查詢 P3 報告每週回應比例數據。
@@ -50,9 +48,7 @@ public class P3reportWeeklyResponseRatioService {
      *         返回值類型為 {@link List}<{@link P3ReportWeeklyResponseRatioDto}>。
      */
     public List<P3ReportWeeklyResponseRatioDto> findByTicketId(String ticketId){
-        return mysqlDBMapper.findByTicketId(ticketId).stream()
-                .map(P3ReportWeeklyResponseRatioDto::new) // 使用建構子直接轉換
-                .toList();
+        return mysqlDBMapper.findByTicketId(ticketId);
     }
 
     /**
@@ -72,8 +68,6 @@ public class P3reportWeeklyResponseRatioService {
      *         返回值類型為 {@link List}<{@link P3ReportWeeklyResponseRatioDto}>。
      */
     public List<P3ReportWeeklyResponseRatioDto> findByConditions(ReportWeeklyConditionReq req){
-        return mysqlDBMapper.findByConditions(req.getEntpCode(), req.getGoodsCode(), req.getEUnread()).stream()
-                .map(P3ReportWeeklyResponseRatioDto::new) // 使用建構子直接轉換
-                .toList();
+        return mysqlDBMapper.findByConditions(req.getEntpCode(), req.getGoodsCode(), req.getEUnread());
     }
 }

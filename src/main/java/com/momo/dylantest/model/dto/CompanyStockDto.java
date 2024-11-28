@@ -1,10 +1,14 @@
 package com.momo.dylantest.model.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Schema(description = "公司股票 DTO，包含所有股票相關數據")
 public class CompanyStockDto {
     @Schema(description = "流水號", example = "1")

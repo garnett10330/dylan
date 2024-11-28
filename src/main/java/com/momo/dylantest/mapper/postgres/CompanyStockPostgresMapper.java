@@ -45,5 +45,5 @@ public interface CompanyStockPostgresMapper {
     List<CompanyStockDto> findCompanyStockPage(@Param("offset") int offset, @Param("pageSize") int pageSize);
 
     @Select({"SELECT count(1) FROM company_stock "})
-    int findCompanyStockCount();
+    long findCompanyStockCount();
 }

@@ -2,6 +2,7 @@ package com.momo.dylantest.model.dto.mysql;
 
 import com.momo.dylantest.model.mysql.P3ReportWeeklyResponseRatioPo;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
+@AllArgsConstructor
 @NoArgsConstructor // 自動生成預設建構子
 public class P3ReportWeeklyResponseRatioDto {
 

@@ -1,9 +1,9 @@
-package com.momo.dylantest.controller;
+package com.momo.dylantest.controller.test;
 
 import com.momo.dylantest.model.mysql.CompanyStockMysqlPo;
 import com.momo.dylantest.response.Response;
+import com.momo.dylantest.response.swagger.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -13,7 +13,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
-
+/**
+ * redis 測試控制器。
+ *
+ * 該控制器負責與 redis 的交互，提供set get 功能。
+ */
 @RestController
 @RequestMapping("/api/test")
 public class RedisController {
@@ -33,17 +37,10 @@ public class RedisController {
      * @return 包裝在 {@link Response} 中的成功消息，內容為固定字符串 "Value set in Redis"。
      */
     @Operation(
-            summary = "設置 Redis 對象值",
-            description = "使用指定的 key 和 data 將對象存儲到 Redis 中，有效期為 100 秒。",
-            parameters = {
-                    @Parameter(name = "key", description = "Redis 鍵值", required = true),
-                    @Parameter(name = "data", description = "用於填充對象的數據", required = true)
-            },
             responses = {
-                    @ApiResponse(responseCode = "200", description = "操作成功",
-                            content = @Content(schema = @Schema(type = "string", example = "Value set in Redis"))),
-                    @ApiResponse(responseCode = "400", description = "參數錯誤"),
-                    @ApiResponse(responseCode = "500", description = "伺服器錯誤")
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "500", description = "ERROR",
+                            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             }
     )
     @PostMapping("/redis/object/v1")
@@ -71,16 +68,10 @@ public class RedisController {
      *         </ul>
      */
     @Operation(
-            summary = "獲取 Redis 對象值",
-            description = "根據指定的 key 從 Redis 中檢索對象值。返回的對象類型是動態的，具體取決於存儲的數據。",
-            parameters = @Parameter(name = "key", description = "Redis 鍵值", required = true),
             responses = {
-                    @ApiResponse(responseCode = "200", description = "操作成功",
-                            content = @Content(schema = @Schema(type = "object"))),
-                    @ApiResponse(responseCode = "400", description = "參數錯誤"),
-                    @ApiResponse(responseCode = "404", description = "對象不存在",
-                            content = @Content(schema = @Schema(type = "string", example = "null"))),
-                    @ApiResponse(responseCode = "500", description = "伺服器錯誤")
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "500", description = "ERROR",
+                            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             }
     )
     @GetMapping("/redis/object/v1")

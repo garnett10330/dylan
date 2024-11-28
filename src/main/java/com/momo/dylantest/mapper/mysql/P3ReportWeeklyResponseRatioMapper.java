@@ -1,5 +1,6 @@
 package com.momo.dylantest.mapper.mysql;
 
+import com.momo.dylantest.model.dto.mysql.P3ReportWeeklyResponseRatioDto;
 import com.momo.dylantest.model.mysql.P3ReportWeeklyResponseRatioPo;
 import org.apache.ibatis.annotations.*;
 
@@ -31,7 +32,7 @@ public interface P3ReportWeeklyResponseRatioMapper {
                     @Result(property = "respElapsedHr", column = "resp_elapsed_hr")
             }
     )
-    List<P3ReportWeeklyResponseRatioPo> findByTicketId(@Param("ticketId") String ticketId);
+    List<P3ReportWeeklyResponseRatioDto> findByTicketId(@Param("ticketId") String ticketId);
 
 
     @Select({
@@ -50,7 +51,7 @@ public interface P3ReportWeeklyResponseRatioMapper {
             "</script>"
     })
     @ResultMap("P3ReportWeeklyResponseRatio")
-    List<P3ReportWeeklyResponseRatioPo> findByConditions(
+    List<P3ReportWeeklyResponseRatioDto> findByConditions(
             @Param("entpCode") String entpCode,
             @Param("goodsCode") String goodsCode,
             @Param("eUnread") Boolean eUnread
@@ -58,5 +59,5 @@ public interface P3ReportWeeklyResponseRatioMapper {
 
     @Select( "SELECT * FROM `3Preport_weekly_response_ratio` ")
     @ResultMap("P3ReportWeeklyResponseRatio")
-    List<P3ReportWeeklyResponseRatioPo> findAll3PReportWeeklyResponseRatio();
+    List<P3ReportWeeklyResponseRatioDto> findAll3PReportWeeklyResponseRatio();
 }

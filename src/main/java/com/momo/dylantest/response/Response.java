@@ -11,7 +11,10 @@ import lombok.ToString;
 @ToString
 @Schema(description = "通用 API 響應結構")
 public class Response<T> {
-    @Schema(description = "返回狀態")
+    @Schema(
+            description = "返回狀態，可能的值：1 (成功), -1 (失敗)",
+            allowableValues = {"1", "-1"}
+    )
     private int code;
     @JsonProperty(value = "message")
     @Schema(description = "返回訊息")
