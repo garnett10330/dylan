@@ -1,4 +1,4 @@
-package com.momo.dylantest.controllerAdvice;
+package com.momo.dylantest.advice;
 import com.momo.dylantest.response.Response;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
@@ -17,7 +17,7 @@ public class ResponseControllerAdvice {
 
     @ExceptionHandler
     @ResponseBody
-    Response handleControllerException(HttpServletRequest request, Throwable ex) {
+    Response<String> handleControllerException(HttpServletRequest request, Throwable ex) {
         log.error(request.getQueryString(), ex);
         if (ex instanceof IllegalArgumentException) {
             return Response.fail(ex.getMessage());

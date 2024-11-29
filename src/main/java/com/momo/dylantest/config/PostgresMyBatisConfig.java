@@ -23,8 +23,6 @@ public class PostgresMyBatisConfig {
     @Bean(name = POSTGRES_SESSION_FACTORY,destroyMethod = "")
     public SqlSessionFactoryBean postgresSqlSessionFactory(@Qualifier (DatabaseConfig.POSTGRES_DATASOURCE) final DataSource postgresDataSource)throws Exception{
         final SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-//        String password = AESUtil.druidDecrypt(publicKey, ((HikariDataSource) postgresDataSource).getPassword());
-//        ((HikariDataSource) postgresDataSource).setPassword(password);
         sqlSessionFactoryBean.setDataSource(postgresDataSource);
         org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session
                 .Configuration();

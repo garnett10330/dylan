@@ -32,10 +32,9 @@ public class ErrorResponse<T> {
         this.data = data;
     }
 
-    
+
 
     public static <T> ErrorResponse<T> fail(String message){
-
         return new ErrorResponse<>(message,ResponseCodeEnum.FAIL.getValue(),null);
     }
 }

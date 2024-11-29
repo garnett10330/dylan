@@ -12,8 +12,8 @@ import java.util.List;
 public class FmpApi {
     @Resource
     private RestClient restClient;
-    static String API_KEY = "rtBlUdMrEgWdwWDahqfYewEPcIxa5jTr";
-    static String FINANCIAL_MODEL_URL = "https://financialmodelingprep.com/api/v3/search?query=";
+    static final String API_KEY = "rtBlUdMrEgWdwWDahqfYewEPcIxa5jTr";
+    static final String FINANCIAL_MODEL_URL = "https://financialmodelingprep.com/api/v3/search?query=";
 
 
     public List<CompanyStockApiDto> searchCompany(String company){

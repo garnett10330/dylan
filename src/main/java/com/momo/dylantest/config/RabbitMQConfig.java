@@ -1,13 +1,15 @@
 package com.momo.dylantest.config;
 
-import com.momo.dylantest.configProperties.RabbitMQConfigProperties;
+import com.momo.dylantest.properties.RabbitMQConfigProperties;
+import com.momo.dylantest.util.LogUtil;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
+@Slf4j
 @Configuration
 public class RabbitMQConfig {
     @Resource
@@ -68,9 +70,9 @@ public class RabbitMQConfig {
         rabbitTemplate.setMandatory(true);
         rabbitTemplate.setConfirmCallback((correlationData, ack, cause) -> {
             if (ack) {
-                System.out.println("Message sent successfully: " + correlationData);
+                log.info(LogUtil.info(LogUtil.GATE_OTHER,"ackSuccess","Message sent successfully: " + correlationData));
             } else {
-                System.err.println("Message failed to send: " + cause);
+                log.info(LogUtil.info(LogUtil.GATE_OTHER,"ackFail","Message failed to send: " + cause));
             }
         });
         return rabbitTemplate;

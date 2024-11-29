@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
-import java.util.stream.Collectors;
 /**
  * 管理公司股票數據的服務類。
  *
@@ -45,7 +44,7 @@ public class CompanyStockService {
     public void insertBatchForMysql(String companyName) throws Exception{
         long start = System.currentTimeMillis();
         List<CompanyStockApiDto> list = fmpApi.searchCompany(companyName);
-        List<CompanyStockMysqlPo> listAll = list.parallelStream().map(companyStock -> new CompanyStockMysqlPo(companyStock)).collect(Collectors.toList());
+        List<CompanyStockMysqlPo> listAll = list.parallelStream().map(CompanyStockMysqlPo::new).toList();
         long count = mysqlDBMapper.findCompanyStockCount();
         long insertStart = System.currentTimeMillis();
         mysqlDBMapper.insertBatchCompanyStock(listAll);
@@ -87,7 +86,7 @@ public class CompanyStockService {
     public void insertBatchForPostgres(String companyName) throws Exception{
         long start = System.currentTimeMillis();
         List<CompanyStockApiDto> list = fmpApi.searchCompany(companyName);
-        List<CompanyStockPostgresPo> listAll = list.parallelStream().map(companyStock -> new CompanyStockPostgresPo(companyStock)).collect(Collectors.toList());
+        List<CompanyStockPostgresPo> listAll = list.parallelStream().map(CompanyStockPostgresPo::new).toList();
         long count = postgresDBMapper.findCompanyStockCount();
         long insertStart = System.currentTimeMillis();
         postgresDBMapper.insertBatchCompanyStock(listAll);

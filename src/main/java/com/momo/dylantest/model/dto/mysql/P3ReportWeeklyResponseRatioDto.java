@@ -47,7 +47,7 @@ public class P3ReportWeeklyResponseRatioDto {
         this.eMsgTime = po.getEMsgTime();
         this.roomId = po.getRoomId();
         this.ticketId = po.getTicketId();
-        this.eUnread = po.getEUnread() == null ? null : po.getEUnread() == true; // 將 TinyInt 轉為 Boolean
+        this.eUnread = po.getEUnread() == null ? null : po.getEUnread(); // 將 TinyInt 轉為 Boolean
         this.respElapsedHr = po.getRespElapsedHr();
     }
 }

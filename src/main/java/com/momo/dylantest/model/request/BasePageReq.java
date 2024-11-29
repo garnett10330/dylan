@@ -11,10 +11,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BasePageReq {
-    @Schema(description = "當前頁碼", example = "1", defaultValue = "1", required = true)
+    @Schema(description = "當前頁碼", example = "1", defaultValue = "1")
     private Integer pageNum = 1; // 默認值為 1
 
-    @Schema(description = "每頁數量", example = "10", defaultValue = "10", required = true)
+    @Schema(description = "每頁數量", example = "10", defaultValue = "10")
     private Integer pageSize = 10; // 默認值為 10
 
     @Schema(hidden = true) // 不顯示在 Swagger 文檔中

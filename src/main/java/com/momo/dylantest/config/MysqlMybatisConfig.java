@@ -22,8 +22,6 @@ public class MysqlMybatisConfig {
     @Primary
     public SqlSessionFactoryBean mysqlSqlSessionFactory(@Qualifier(DatabaseConfig.MYSQL_DATASOURCE) final DataSource mysqlDataSource)throws Exception{
         final SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-//        String password = AESUtil.druidDecrypt(publicKey, ((HikariDataSource) mysqlDataSource).getPassword());
-//        ((HikariDataSource) mysqlDataSource).setPassword(password);
         sqlSessionFactoryBean.setDataSource(mysqlDataSource);
         org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session
                 .Configuration();

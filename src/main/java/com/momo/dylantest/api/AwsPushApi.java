@@ -12,12 +12,12 @@ import java.util.List;
 public class AwsPushApi {
     @Resource
     private RestClient restClient;
-    static String apiKey = "rtBlUdMrEgWdwWDahqfYewEPcIxa5jTr";
+    static final String API_KEY = "rtBlUdMrEgWdwWDahqfYewEPcIxa5jTr";
 
 
     public List<CompanyStockMysqlPo> searchCompany(String company){
         return  restClient.get()
-                .uri("https://financialmodelingprep.com/api/v3/search?query="+company+"&apikey="+apiKey)
+                .uri("https://financialmodelingprep.com/api/v3/search?query="+company+"&apikey="+API_KEY)
                 .retrieve()
                 .body(new ParameterizedTypeReference<>(){});
     }

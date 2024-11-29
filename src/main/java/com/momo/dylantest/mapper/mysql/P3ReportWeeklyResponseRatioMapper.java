@@ -1,7 +1,6 @@
 package com.momo.dylantest.mapper.mysql;
 
 import com.momo.dylantest.model.dto.mysql.P3ReportWeeklyResponseRatioDto;
-import com.momo.dylantest.model.mysql.P3ReportWeeklyResponseRatioPo;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;

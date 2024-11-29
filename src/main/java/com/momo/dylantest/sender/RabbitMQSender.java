@@ -1,6 +1,6 @@
 package com.momo.dylantest.sender;
 
-import com.momo.dylantest.configProperties.RabbitMQConfigProperties;
+import com.momo.dylantest.properties.RabbitMQConfigProperties;
 import com.momo.dylantest.util.LogUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,6 @@ public class RabbitMQSender {
     @Resource
     private RabbitMQConfigProperties rabbitMQConfigProperties;
 
-    private final String exchange = "normal-exchange";
 
     // 发送消息到带死信队列的普通队列
     public void sendToNormalQueue(String message) {

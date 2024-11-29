@@ -40,7 +40,7 @@ public class AwsTestController {
             }
     )
     @PostMapping("/upload/v1")
-    public Response uploadFile(@RequestParam String filePath) throws Exception {
+    public Response<String> uploadFile(@RequestParam String filePath) throws Exception {
         s3Service.uploadFile(BUCKET_NAME_TEST, filePath);
         return Response.success("File uploaded successfully!");
     }

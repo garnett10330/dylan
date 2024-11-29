@@ -1,4 +1,4 @@
-package com.momo.dylantest.configProperties;
+package com.momo.dylantest.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
