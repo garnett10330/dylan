@@ -8,16 +8,18 @@ import com.momo.dylantest.model.dto.CompanyStockDto;
 import com.momo.dylantest.model.dto.api.CompanyStockApiDto;
 import com.momo.dylantest.model.request.BasePageReq;
 import com.momo.dylantest.model.request.StockSymbolSearchReq;
+import com.momo.dylantest.service.fmp.CompanyStockService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)

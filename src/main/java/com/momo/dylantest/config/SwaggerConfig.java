@@ -1,11 +1,12 @@
 package com.momo.dylantest.config;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-
+@Slf4j
 @Configuration
 public class SwaggerConfig {
 
@@ -33,8 +34,6 @@ public class SwaggerConfig {
                 .pathsToMatch("/api/**")
                 .build();
     }
-
-
 
 }
 

@@ -2,8 +2,8 @@ package com.momo.dylantest.service;
 
 import com.momo.dylantest.mapper.mysql.MysqlDBMapper;
 import com.momo.dylantest.model.dto.mysql.P3ReportWeeklyResponseRatioDto;
-import com.momo.dylantest.model.mysql.P3ReportWeeklyResponseRatioPo;
 import com.momo.dylantest.model.request.ReportWeeklyConditionReq;
+import com.momo.dylantest.service.test.P3reportWeeklyResponseRatioService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)

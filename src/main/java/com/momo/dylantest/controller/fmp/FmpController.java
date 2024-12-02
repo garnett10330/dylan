@@ -3,14 +3,10 @@ package com.momo.dylantest.controller.fmp;
 import com.momo.dylantest.model.PageVo;
 import com.momo.dylantest.model.dto.CompanyStockDto;
 import com.momo.dylantest.model.request.BasePageReq;
+import com.momo.dylantest.model.request.FmpSaveAllReq;
 import com.momo.dylantest.model.request.StockSymbolSearchReq;
 import com.momo.dylantest.response.Response;
-import com.momo.dylantest.response.swagger.ErrorResponse;
-import com.momo.dylantest.service.CompanyStockService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import com.momo.dylantest.service.fmp.CompanyStockService;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -34,20 +30,13 @@ public class FmpController {
      * <p>
      * 根據提供的公司名稱(like%)，批量將相關的股票數據保存到 MySQL。
      * </p>
-     * @param companyName 要保存的公司名稱。
+     * @param fmpSaveAllReq 包含 companyName 請求參數 {@code FmpSaveAllReq}。
      * @return 保存操作的結果。{@link Response}
      * @throws Exception 如果保存過程中發生錯誤。
      */
-    @Operation(
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "OK"),
-                    @ApiResponse(responseCode = "500", description = "ERROR",
-                            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-            }
-    )
     @PostMapping("/batch/mysql/v1")
-    public Response<String> saveAllMysql(@RequestParam String companyName) throws Exception{
-        companyStockService.insertBatchForMysql(companyName);
+    public Response<String> saveAllMysql(@Valid @RequestBody FmpSaveAllReq fmpSaveAllReq) throws Exception{
+        companyStockService.insertBatchForMysql(fmpSaveAllReq.getCompanyName());
         return Response.success();
     }
     /**
@@ -61,13 +50,6 @@ public class FmpController {
      * 返回值為 {@link Response}，其中封裝了 {@link PageVo}。
      *  *         {@link PageVo} 包含分頁信息和 {@link CompanyStockDto} 的數據列表。
      */
-    @Operation(
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "OK"),
-                    @ApiResponse(responseCode = "500", description = "ERROR",
-                            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-            }
-    )
     @GetMapping("/mysql/v1")
     public Response<PageVo<CompanyStockDto>> getStocksMysql(BasePageReq req) {
         return Response.success(companyStockService.getAllStocksWithPageMysql(req));
@@ -77,20 +59,13 @@ public class FmpController {
      * <p>
      * 根據提供的公司名稱(like%)，批量將相關的股票數據保存到 PostgreSQL。
      * </p>
-     * @param companyName 要保存的公司名稱。
+     * @param fmpSaveAllReq 包含 companyName 請求參數 {@code FmpSaveAllReq}。
      * @return 保存操作的結果。{@link Response}
      * @throws Exception 如果保存過程中發生錯誤。
      */
-    @Operation(
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "OK"),
-                    @ApiResponse(responseCode = "500", description = "ERROR",
-                            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-            }
-    )
     @PostMapping("/batch/postgres/v1")
-    public Response<String> saveAllPostgres(@RequestParam String companyName) throws Exception{
-        companyStockService.insertBatchForPostgres(companyName);
+    public Response<String> saveAllPostgres(@Valid @RequestBody FmpSaveAllReq fmpSaveAllReq) throws Exception{
+        companyStockService.insertBatchForPostgres(fmpSaveAllReq.getCompanyName());
         return Response.success();
     }
     /**
@@ -103,13 +78,6 @@ public class FmpController {
      *            </ul>
      * @return 包含公司股票數據的分頁結果。
      */
-    @Operation(
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "OK"),
-                    @ApiResponse(responseCode = "500", description = "ERROR",
-                            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-            }
-    )
     @GetMapping("/postgres/v1")
     public Response<PageVo<CompanyStockDto>> getStocksPostgres(BasePageReq req) {
         return Response.success(companyStockService.getAllStocksWithPagePostgres(req));
@@ -128,15 +96,8 @@ public class FmpController {
      * @param req 包含 symbol、pageNum 和 pageSize 的請求參數 {@code StockSymbolSearchReq}。
      * @return 分頁查詢結果
      */
-    @Operation(
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "OK"),
-                    @ApiResponse(responseCode = "500", description = "ERROR",
-                            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-            }
-    )
     @PostMapping("/search/v1")
-    public Response<PageVo<CompanyStockDto>> searchStocks(@RequestBody @Valid StockSymbolSearchReq req) {
+    public Response<PageVo<CompanyStockDto>> searchStocks(@Valid @RequestBody StockSymbolSearchReq req) {
         return Response.success(companyStockService.findStocksBySymbolWithPage(req));
     }
 

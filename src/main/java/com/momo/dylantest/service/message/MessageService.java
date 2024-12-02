@@ -1,6 +1,6 @@
-package com.momo.dylantest.service;
+package com.momo.dylantest.service.message;
 
-import com.momo.dylantest.sender.RabbitMQSender;
+import com.momo.dylantest.producer.RabbitMQProducer;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 public class MessageService {
     @Resource
-    private RabbitMQSender rabbitMQSender;
+    private RabbitMQProducer rabbitMQProducer;
     /**
      * 發送消息到普通佇列包含死信。
      *
@@ -24,7 +24,7 @@ public class MessageService {
      * @return 成功發送消息的提示信息。
      */
     public String sendToNormal(String message) {
-        rabbitMQSender.sendToNormalQueue(message);
+        rabbitMQProducer.sendToNormalQueue(message);
         return "Message sent to normal queue!";
     }
     /**
@@ -34,7 +34,7 @@ public class MessageService {
      * @return 成功發送消息的提示信息。
      */
     public String sendToNoDlq(String message) {
-        rabbitMQSender.sendToNoDlqQueue(message);
+        rabbitMQProducer.sendToNoDlqQueue(message);
         return "Message sent to no-dlq queue!";
     }
     /**
@@ -48,7 +48,7 @@ public class MessageService {
         CompletableFuture<?>[] futures = new CompletableFuture[numberOfMessages];
         for (int i = 1; i <= numberOfMessages; i++) {
             String sendMessage = message + i;
-            futures[i - 1] = CompletableFuture.runAsync(() -> rabbitMQSender.sendToNoDlqQueue(sendMessage));
+            futures[i - 1] = CompletableFuture.runAsync(() -> rabbitMQProducer.sendToNoDlqQueue(sendMessage));
         }
         CompletableFuture.allOf(futures).join(); // 等待所有的任務完成
         return numberOfMessages+" messages sent concurrently to no-dlq queue!";

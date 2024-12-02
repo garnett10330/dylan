@@ -1,4 +1,4 @@
-package com.momo.dylantest.sender;
+package com.momo.dylantest.producer;
 
 import com.momo.dylantest.properties.RabbitMQConfigProperties;
 import com.momo.dylantest.util.LogUtil;
@@ -8,7 +8,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 @Slf4j
 @Service
-public class RabbitMQSender {
+public class RabbitMQProducer {
     @Resource
     private RabbitTemplate rabbitTemplate;
     @Resource

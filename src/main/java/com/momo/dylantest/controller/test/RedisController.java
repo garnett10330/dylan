@@ -1,13 +1,10 @@
 package com.momo.dylantest.controller.test;
 
 import com.momo.dylantest.model.mysql.CompanyStockMysqlPo;
+import com.momo.dylantest.model.request.RedisSetReq;
 import com.momo.dylantest.response.Response;
-import com.momo.dylantest.response.swagger.ErrorResponse;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.annotation.Resource;
+import jakarta.validation.Valid;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,25 +28,20 @@ public class RedisController {
      * 該方法使用指定的 key 和 data 創建一個 {@link CompanyStockMysqlPo} 對象，
      * 並將該對象存儲到 Redis 中，有效期為 100 秒。
      * </p>
-     *
-     * @param key  存儲的鍵。
-     * @param data 存儲的數據，用於填充對象的 symbol 字段。
+     * @param redisSetReq 包含查詢條件的請求物件，其中包括：
+     *            <ul>
+     *                <li>{@code key}  存儲的鍵（必選）。</li>
+     *                <li>{@code data} 存儲的數據，用於填充對象的 symbol 字段。（必選）。</li>
+     *            </ul>
      * @return 包裝在 {@link Response} 中的成功消息，內容為固定字符串 "Value set in Redis"。
      */
-    @Operation(
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "OK"),
-                    @ApiResponse(responseCode = "500", description = "ERROR",
-                            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-            }
-    )
     @PostMapping("/redis/object/v1")
-    public Response<String> setValue(@RequestParam String key, @RequestParam String data) {
+    public Response<String> setValue(@Valid @RequestBody RedisSetReq redisSetReq) {
         CompanyStockMysqlPo companyStock = new CompanyStockMysqlPo();
         companyStock.setId(12345);
         companyStock.setGmtCreated(LocalDateTime.now());
-        companyStock.setSymbol(data);
-        redisTemplate.opsForValue().set(key, companyStock,100, TimeUnit.SECONDS);
+        companyStock.setSymbol(redisSetReq.getData());
+        redisTemplate.opsForValue().set(redisSetReq.getKey(), companyStock,100, TimeUnit.SECONDS);
         return Response.success("Value set in Redis");
     }
 
@@ -67,13 +59,6 @@ public class RedisController {
      *             <li>當鍵不存在時，返回 {@code null}。</li>
      *         </ul>
      */
-    @Operation(
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "OK"),
-                    @ApiResponse(responseCode = "500", description = "ERROR",
-                            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-            }
-    )
     @GetMapping("/redis/object/v1")
     public Response<Object> getObjectValue(@RequestParam String key) {
         return Response.success(redisTemplate.opsForValue().get(key));

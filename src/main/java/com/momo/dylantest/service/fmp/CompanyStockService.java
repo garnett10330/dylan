@@ -1,4 +1,4 @@
-package com.momo.dylantest.service;
+package com.momo.dylantest.service.fmp;
 
 import com.momo.dylantest.api.FmpApi;
 import com.momo.dylantest.mapper.mysql.MysqlDBMapper;

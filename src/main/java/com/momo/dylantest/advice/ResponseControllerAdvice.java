@@ -1,5 +1,11 @@
 package com.momo.dylantest.advice;
+
 import com.momo.dylantest.response.Response;
+import com.momo.dylantest.response.swagger.ErrorResponse;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +21,10 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 @Slf4j
 public class ResponseControllerAdvice {
 
+    @ApiResponses({
+            @ApiResponse(responseCode = "500", description = "ERROR",
+                            content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @ExceptionHandler
     @ResponseBody
     Response<String> handleControllerException(HttpServletRequest request, Throwable ex) {

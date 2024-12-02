@@ -3,12 +3,7 @@ package com.momo.dylantest.controller.test;
 import com.momo.dylantest.model.dto.mysql.P3ReportWeeklyResponseRatioDto;
 import com.momo.dylantest.model.request.ReportWeeklyConditionReq;
 import com.momo.dylantest.response.Response;
-import com.momo.dylantest.response.swagger.ErrorResponse;
-import com.momo.dylantest.service.P3reportWeeklyResponseRatioService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import com.momo.dylantest.service.test.P3reportWeeklyResponseRatioService;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
@@ -41,13 +36,6 @@ public class TestController {
      * </p>
      * @return 包含所有週回應比例的列表。
      */
-    @Operation(
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "OK"),
-                    @ApiResponse(responseCode = "500", description = "ERROR",
-                            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-            }
-    )
     @GetMapping("/v1")
     public Response<List<P3ReportWeeklyResponseRatioDto>> findAll(){
         return Response.success(p3reportWeeklyResponseRatioService.findAll());
@@ -63,13 +51,6 @@ public class TestController {
      *         返回值包裝在 {@link Response} 中，數據類型為 {@link List}，
      *         每個元素為 {@link P3ReportWeeklyResponseRatioDto}。
      */
-    @Operation(
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "OK"),
-                    @ApiResponse(responseCode = "500", description = "ERROR",
-                            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-            }
-    )
     @GetMapping(path="/v1",params = "ticketId")
     public Response<List<P3ReportWeeklyResponseRatioDto>> findByTicketId(@RequestParam String ticketId){
         return Response.success(p3reportWeeklyResponseRatioService.findByTicketId(ticketId));
@@ -82,13 +63,7 @@ public class TestController {
      * @param ticketId 工單 ID，必須是十位數的格式。
      * @return 匹配指定 Ticket ID 的週回應比例數據列表。
      */
-    @Operation(
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "OK"),
-                    @ApiResponse(responseCode = "500", description = "ERROR",
-                            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-            }
-    )
+
     @GetMapping(path = "/vaildtest/v1",params = "ticketId")
     public Response<List<P3ReportWeeklyResponseRatioDto>> findByTicketIdVaild(
             @Pattern(regexp="^[0-9]{10}$", message="ticketId必須是十位數的格式")
@@ -111,13 +86,6 @@ public class TestController {
      * @return 根據條件查詢週回應比例數據
 
      */
-    @Operation(
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "OK"),
-                    @ApiResponse(responseCode = "500", description = "ERROR",
-                            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-            }
-    )
     @GetMapping("/conditions/v1")
     public Response<List<P3ReportWeeklyResponseRatioDto>> findByConditions(@Valid ReportWeeklyConditionReq req) {
         return Response.success(p3reportWeeklyResponseRatioService.findByConditions(req));

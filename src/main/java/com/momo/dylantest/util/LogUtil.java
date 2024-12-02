@@ -2,15 +2,15 @@ package com.momo.dylantest.util;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-
+@Slf4j
 public class LogUtil {
 
     // 私有構造函數，防止實例化
@@ -96,9 +96,8 @@ public class LogUtil {
 
             // 如果字符串長度超過 500，進行截斷
             return stackTrace.length() <= 500 ? stackTrace : stackTrace.substring(0, 500);
-        } catch (IOException ioException) {
-            // StringWriter 不應該拋出 IOException，但此處保底處理
-            ioException.printStackTrace();
+        } catch (Exception ioException) {
+            log.error("An Exception occurred: {}", ioException.getMessage(), ioException);
         }
 
         // 若發生意外情況，返回空字符串
@@ -111,10 +110,10 @@ public class LogUtil {
      * @param str
      * @return 取消非法字符的string
      */
-    private static String replaceStr(String str) {
+    public static String replaceStr(String str) {
         if (!StringUtils.hasLength(str)) {
             return "";
         }
-        return str.replace("\"", "'").replace("\n", "").replace("\t", "").replace("\\\\", "");
+        return str.replace("\"", "'").replace("\n", "").replace("\t", "").replace("\\", "");
     }
 }

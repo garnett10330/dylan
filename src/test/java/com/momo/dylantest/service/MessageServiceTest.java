@@ -1,6 +1,7 @@
 package com.momo.dylantest.service;
 
-import com.momo.dylantest.sender.RabbitMQSender;
+import com.momo.dylantest.producer.RabbitMQProducer;
+import com.momo.dylantest.service.message.MessageService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,7 +20,7 @@ class MessageServiceTest {
     private MessageService messageService;
 
     @Mock
-    private RabbitMQSender rabbitMQSender;
+    private RabbitMQProducer rabbitMQProducer;
 
     @Test
     void testSendToNormal() {
@@ -30,7 +31,7 @@ class MessageServiceTest {
         String result = messageService.sendToNormal(message);
 
         // Assert
-        verify(rabbitMQSender, times(1)).sendToNormalQueue(message);
+        verify(rabbitMQProducer, times(1)).sendToNormalQueue(message);
         assertEquals("Message sent to normal queue!", result);
     }
 
@@ -43,7 +44,7 @@ class MessageServiceTest {
         String result = messageService.sendToNoDlq(message);
 
         // Assert
-        verify(rabbitMQSender, times(1)).sendToNoDlqQueue(message);
+        verify(rabbitMQProducer, times(1)).sendToNoDlqQueue(message);
         assertEquals("Message sent to no-dlq queue!", result);
     }
 
@@ -51,13 +52,13 @@ class MessageServiceTest {
     void testSendMutiToNoDlq() {
         // Arrange
         String message = "BatchMessage";
-        doNothing().when(rabbitMQSender).sendToNoDlqQueue(anyString());
+        doNothing().when(rabbitMQProducer).sendToNoDlqQueue(anyString());
 
         // Act
         String result = messageService.sendMutiToNoDlq(message);
 
         // Assert
-        verify(rabbitMQSender, times(5000)).sendToNoDlqQueue(anyString());
+        verify(rabbitMQProducer, times(5000)).sendToNoDlqQueue(anyString());
         assertEquals("5000 messages sent concurrently to no-dlq queue!", result);
     }
 }

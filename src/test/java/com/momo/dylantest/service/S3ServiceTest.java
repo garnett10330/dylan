@@ -1,5 +1,6 @@
 package com.momo.dylantest.service;
 
+import com.momo.dylantest.service.test.S3Service;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
