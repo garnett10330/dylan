@@ -1,6 +1,7 @@
 package com.momo.dylantest.api;
 
 import com.momo.dylantest.model.dto.api.CompanyStockApiDto;
+import com.momo.dylantest.properties.FmpApiConfigProperties;
 import jakarta.annotation.Resource;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
@@ -12,13 +13,18 @@ import java.util.List;
 public class FmpApi {
     @Resource
     private RestClient restClient;
-    static final String API_KEY = "rtBlUdMrEgWdwWDahqfYewEPcIxa5jTr";
-    static final String FINANCIAL_MODEL_URL = "https://financialmodelingprep.com/api/v3/search?query=";
+    @Resource
+    private FmpApiConfigProperties fmpApiConfig;
 
 
     public List<CompanyStockApiDto> searchCompany(String company){
+        String url = String.format("%s?query=%s&apikey=%s",
+                fmpApiConfig.getBaseUrl(),
+                company,
+                fmpApiConfig.getApiKey());
+
         return  restClient.get()
-                .uri(FINANCIAL_MODEL_URL+company+"&apikey="+API_KEY)
+                .uri(url)
                 .retrieve()
                 .body(new ParameterizedTypeReference<>(){});
     }

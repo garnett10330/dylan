@@ -1,6 +1,7 @@
 package com.momo.dylantest.api;
 
 import com.momo.dylantest.model.dto.api.CompanyStockApiDto;
+import com.momo.dylantest.properties.FmpApiConfigProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -24,9 +25,15 @@ class FmpApiTest {
     @Mock
     private RestClient restClient;
 
+    @Mock
+    private FmpApiConfigProperties fmpApiConfig;
+
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
+        // 模擬配置
+        when(fmpApiConfig.getBaseUrl()).thenReturn("https://financialmodelingprep.com/api/v3/search");
+        when(fmpApiConfig.getApiKey()).thenReturn("test-api-key");
     }
 
     @Test

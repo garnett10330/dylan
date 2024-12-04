@@ -152,6 +152,10 @@ springdoc:
   default-produces-media-type: application/json
   default-consumes-media-type: application/json
 
+fmp:
+  api-key: rtBlUdMrEgWdwWDahqfYewEPcIxa5jTr
+  base-url: https://financialmodelingprep.com/api/v3/search
+
 logging:
   level:
     com.momo.dylantest: DEBUG
