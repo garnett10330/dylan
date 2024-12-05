@@ -12,7 +12,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import javax.sql.DataSource;
 
 /**
- * @author wei
+ * @author Dylan
  */
 @Configuration
 @MapperScan(basePackages = "com.momo.dylantest.mapper.postgres", sqlSessionFactoryRef = PostgresMyBatisConfig.POSTGRES_SESSION_FACTORY)

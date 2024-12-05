@@ -14,7 +14,7 @@ import java.util.Date;
 /**
  * 新版日期时间工具
  *
- * @auther wei
+ * @auther Dylan
  */
 public class DateTimeUtil {
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");

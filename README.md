@@ -1,1 +1,8 @@
 # dylan
+application.yml
+redis的部分使用了cluster 依照各自的環境做修改
+rds的部分自行修改成各自的環境
+
+logback.xml記得將LOG_HOME改成你指定的路徑
+
+resource內有sql語法

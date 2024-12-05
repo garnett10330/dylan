@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 /**
- * @author wei
+ * @author Dylan
  */
 @Configuration
 public class BaseProjectConfig {
