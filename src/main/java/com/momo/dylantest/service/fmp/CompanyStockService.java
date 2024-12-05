@@ -49,7 +49,7 @@ public class CompanyStockService {
         long insertStart = System.currentTimeMillis();
         mysqlDBMapper.insertBatchCompanyStock(listAll);
         long end = System.currentTimeMillis();
-        log.info(LogUtil.info(LogUtil.GATE_FRONT,"insertBatchForMysql","searchCompany消耗時間:"+(insertStart-start)+",count:"+count+",insertBatch消耗時間:"+(end-insertStart)+",筆數:"+listAll.size()));
+        log.info(LogUtil.info(LogUtil.GATE_FRONT,"insertBatchForMysql","searchCompany:"+companyName+",消耗時間:"+(insertStart-start)+",count:"+count+",insertBatch消耗時間:"+(end-insertStart)+",筆數:"+listAll.size()));
     }
     /**
      * 從 MySQL 中以分頁方式檢索所有公司股票數據。
@@ -91,7 +91,7 @@ public class CompanyStockService {
         long insertStart = System.currentTimeMillis();
         postgresDBMapper.insertBatchCompanyStock(listAll);
         long end = System.currentTimeMillis();
-        log.info(LogUtil.info(LogUtil.GATE_FRONT,"insertBatchForMysql","searchCompany消耗時間:"+(insertStart-start)+",count:"+count+",insertBatch消耗時間:"+(end-insertStart)+",筆數:"+listAll.size()));
+        log.info(LogUtil.info(LogUtil.GATE_FRONT,"insertBatchForMysql","searchCompany:"+companyName+",消耗時間:"+(insertStart-start)+",count:"+count+",insertBatch消耗時間:"+(end-insertStart)+",筆數:"+listAll.size()));
     }
     /**
      * 從 PostgreSQL 中以分頁方式檢索所有公司股票數據。

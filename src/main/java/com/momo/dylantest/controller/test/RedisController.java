@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
  * redis 測試控制器。
  *
  * 該控制器負責與 redis 的交互，提供set get 功能。
+ * 反面教材 controller 不應該包含這些邏輯 應該要放進service
  */
 @RestController
 @RequestMapping("/api/test")
