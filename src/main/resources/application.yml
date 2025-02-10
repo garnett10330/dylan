@@ -97,6 +97,21 @@ spring:
       name: weichen
       password: qwe123
       roles: ACTUATOR_ADMIN
+  kafka:
+      bootstrap-servers: localhost:9092
+      topics:
+        primary: primary-topic
+        secondary: secondary-topic
+        deadLetter: dead-letter-topic
+        streamInput: stream-input-topic
+        streamOutput: stream-output-topic
+      consumer:
+        groupId: my-consumer-group
+        retry:
+          backOffPeriod: 1000    # 單位毫秒
+          maxAttempts: 3
+      stream:
+        applicationId: my-stream-app
 
 management:
   endpoints:
@@ -137,7 +152,6 @@ management:
 #  server:
 #    port: 8081
 
-
 aws:
   region: ap-northeast-1
   endpoint: http://localhost:4566
@@ -158,9 +172,11 @@ fmp:
 
 logging:
   level:
-    com.momo.dylantest: DEBUG
-    org.springdoc: DEBUG
-    io.swagger: DEBUG
-#    org.mybatis: DEBUG
+    root: WARN
+    com.momo.dylantest: INFO
+    org.springframework: INFO
+##    org.springdoc: DEBUG
+##    io.swagger: DEBUG
+##    org.mybatis: DEBUG
 
 

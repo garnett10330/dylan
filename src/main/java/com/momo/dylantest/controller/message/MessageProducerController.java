@@ -3,7 +3,7 @@ package com.momo.dylantest.controller.message;//package com.momo.dylantest.contr
 import com.momo.dylantest.model.mysql.CompanyStockMysqlPo;
 import com.momo.dylantest.model.request.MessageTestReq;
 import com.momo.dylantest.response.Response;
-import com.momo.dylantest.service.message.MessageService;
+import com.momo.dylantest.service.message.RabbitMessageService;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 public class MessageProducerController {
 
     @Resource
-    private MessageService messageService;
+    private RabbitMessageService messageService;
 
     /**
      * 發送消息到普通佇列。

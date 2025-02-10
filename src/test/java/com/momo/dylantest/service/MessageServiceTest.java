@@ -1,7 +1,7 @@
 package com.momo.dylantest.service;
 
 import com.momo.dylantest.producer.RabbitMQProducer;
-import com.momo.dylantest.service.message.MessageService;
+import com.momo.dylantest.service.message.RabbitMessageService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 class MessageServiceTest {
 
     @InjectMocks
-    private MessageService messageService;
+    private RabbitMessageService messageService;
 
     @Mock
     private RabbitMQProducer rabbitMQProducer;

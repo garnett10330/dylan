@@ -14,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
  */
 @Service
 @Slf4j
-public class MessageService {
+public class RabbitMessageService {
     @Resource
     private RabbitMQProducer rabbitMQProducer;
     /**
@@ -25,7 +25,7 @@ public class MessageService {
      */
     public String sendToNormal(String message) {
         rabbitMQProducer.sendToNormalQueue(message);
-        return "Message sent to normal queue!";
+        return "Message sent to normal queue!"+message;
     }
     /**
      * 發送消息到無死信佇列。
@@ -35,7 +35,7 @@ public class MessageService {
      */
     public String sendToNoDlq(String message) {
         rabbitMQProducer.sendToNoDlqQueue(message);
-        return "Message sent to no-dlq queue!";
+        return "Message sent to no-dlq queue!"+message;
     }
     /**
      * 批量發送 100 條消息到無死信佇列。

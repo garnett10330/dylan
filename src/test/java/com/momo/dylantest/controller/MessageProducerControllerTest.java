@@ -1,7 +1,7 @@
 package com.momo.dylantest.controller;
 
 import com.momo.dylantest.controller.message.MessageProducerController;
-import com.momo.dylantest.service.message.MessageService;
+import com.momo.dylantest.service.message.RabbitMessageService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,7 +23,7 @@ class MessageProducerControllerTest {
     private MockMvc mockMvc;
 
     @Mock
-    private MessageService messageService;
+    private RabbitMessageService messageService;
 
     @InjectMocks
     private MessageProducerController messageProducerController;
