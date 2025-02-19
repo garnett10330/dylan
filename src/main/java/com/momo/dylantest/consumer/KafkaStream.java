@@ -6,13 +6,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
-import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Consumed;
+import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Produced;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 @Slf4j
 @RequiredArgsConstructor
 public class KafkaStream {
@@ -28,14 +28,18 @@ public class KafkaStream {
     @Bean
     public KStream<String, String> kStream(StreamsBuilder streamsBuilder) {
         KStream<String, String> stream = streamsBuilder.stream(
-                kafkaConfigProperties.getTopics().getStreamInput(),
+                kafkaConfigProperties.getTopics().getStreamInput().getName(),
+//                "input-stream-topic",
                 Consumed.with(Serdes.String(), Serdes.String())
         );
 
         stream.mapValues(value -> {
             log.info(LogUtil.info(LogUtil.GATE_OTHER,"Stream processing - original value: {}", value));
             return value.toUpperCase();
-        }).to(kafkaConfigProperties.getTopics().getStreamOutput(), Produced.with(Serdes.String(), Serdes.String()));
+        }).to(
+                kafkaConfigProperties.getTopics().getStreamOutput().getName()
+//                "output-stream-topic"
+                , Produced.with(Serdes.String(), Serdes.String()));
 
         return stream;
     }

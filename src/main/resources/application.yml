@@ -98,20 +98,48 @@ spring:
       password: qwe123
       roles: ACTUATOR_ADMIN
   kafka:
-      bootstrap-servers: localhost:9092
-      topics:
-        primary: primary-topic
-        secondary: secondary-topic
-        deadLetter: dead-letter-topic
-        streamInput: stream-input-topic
-        streamOutput: stream-output-topic
-      consumer:
-        groupId: my-consumer-group
-        retry:
-          backOffPeriod: 1000    # 單位毫秒
-          maxAttempts: 3
-      stream:
-        applicationId: my-stream-app
+    bootstrap-servers: localhost:9092
+    producer:
+      acks: all
+      retries: 3
+      batch-size: 16384
+      linger: 1
+      buffer-memory: 33554432
+    consumer:
+      auto-offset-reset: earliest
+      retry-backoff-ms: 1000
+      max-attempts: 3
+
+    streams:
+      application-id: stream-app
+    topics:
+      single:
+        name: single-topic
+        group: single-group
+      multiConsumer:
+        name: multi-topic
+        group: multi-group
+        concurrency: 3
+      multiGroup:
+        name: multi-group-topic
+        groups:
+          - group1
+          - group2
+        concurrency: 3
+      streamInput:
+        name: input-stream-topic
+      streamOutput:
+        name: output-stream-topic
+    deadLetter:
+      singleGroup: dead-letter-group-single
+      multiConsumerGroup: dead-letter-group-multi
+      multiGroup:
+        groups:
+          - dead-letter-group-multiGroup-1
+          - dead-letter-group-multiGroup-2
+      streams:
+        inputGroup: dead-letter-group-input-stream
+        outputGroup: dead-letter-group-output-stream
 
 management:
   endpoints:

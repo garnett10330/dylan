@@ -18,9 +18,15 @@ public class LogUtil {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 
-    public static final int GATE_FRONT = 0;
-    public static final int GATE_CMS = 1;
-    public static final int GATE_OTHER = 2;
+    private static final int MAX_STACK_TRACE_LENGTH = 500;
+    private static final String EMPTY_JSON = "{}";
+    private static final String EMPTY_STRING = "";
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();  // 靜態共用實例
+    
+    // 定義 gate 類型的常數說明
+    public static final int GATE_FRONT = 0;  // 前台
+    public static final int GATE_CMS = 1;    // 後台
+    public static final int GATE_OTHER = 2;  // 其他
 
     /**
      * 系统发送意外异常时捕获到的日志，一般通过 try-catch 捕获到的
@@ -35,14 +41,7 @@ public class LogUtil {
         errorDetails.put("exception", e == null ? "" : replaceStr(e.getMessage()));
         errorDetails.put("stackTrace", e == null ? "" : replaceStr(getStackTrace(e)));
 
-        try {
-            // 使用 Jackson 將 Map 轉為 JSON 字符串
-            ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.writeValueAsString(errorDetails);
-        } catch (Exception ex) {
-            // 如果 JSON 轉換失敗，返回空字符串或其他處理方式
-            return "{}";
-        }
+        return convertToJson(errorDetails);
     }
 
     /**
@@ -59,14 +58,8 @@ public class LogUtil {
         jsonMap.put("gate", gate);
         jsonMap.put("remark", replaceStr(remark));
         jsonMap.put("detail", replaceStr(detail));
-        try {
-            // 使用 Jackson 生成 JSON 字符串
-            ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.writeValueAsString(jsonMap);
-        } catch (Exception e) {
-            // 如果 JSON 轉換失敗，返回空 JSON
-            return "{}";
-        }
+        
+        return convertToJson(jsonMap);
     }
 
     /**
@@ -95,7 +88,7 @@ public class LogUtil {
             String stackTrace = sw.toString();
 
             // 如果字符串長度超過 500，進行截斷
-            return stackTrace.length() <= 500 ? stackTrace : stackTrace.substring(0, 500);
+            return stackTrace.length() <= MAX_STACK_TRACE_LENGTH ? stackTrace : stackTrace.substring(0, MAX_STACK_TRACE_LENGTH);
         } catch (Exception ioException) {
             log.error("An Exception occurred: {}", ioException.getMessage(), ioException);
         }
@@ -112,8 +105,18 @@ public class LogUtil {
      */
     public static String replaceStr(String str) {
         if (!StringUtils.hasLength(str)) {
-            return "";
+            return EMPTY_STRING;
         }
         return str.replace("\"", "'").replace("\n", "").replace("\t", "").replace("\\", "");
     }
+
+    private static String convertToJson(Object object) {
+        try {
+            return OBJECT_MAPPER.writeValueAsString(object);
+        } catch (Exception e) {
+            log.error("JSON conversion failed", e);
+            return EMPTY_JSON;
+        }
+    }
+    
 }

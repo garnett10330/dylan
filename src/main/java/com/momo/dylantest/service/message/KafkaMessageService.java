@@ -5,6 +5,8 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.CompletableFuture;
+
 /**
  * 消息服務類。
  *
@@ -16,25 +18,51 @@ import org.springframework.stereotype.Service;
 public class KafkaMessageService {
     @Resource
     private KafkaProducer kafkaProducer;
+    private static final int NUMBER_OF_MESSAGES = 50;
 
     /**
-     * 發送消息到 primary topic。
+     * 發送消息到 Single topic。
      *
      * @param message 要發送的消息內容。
      * @return 成功發送消息的提示信息。
      */
-    public String sendToPrimary(String message) {
-        kafkaProducer.sendToPrimary("key-primary", message);
-        return "Sent message to primary topic: " + message;
+    public String sendToSingle(String message) {
+        CompletableFuture<?>[] futures = new CompletableFuture[NUMBER_OF_MESSAGES];
+        for (int i = 1; i <= NUMBER_OF_MESSAGES; i++) {
+            String sendMessage = message + i;
+            futures[i - 1] = CompletableFuture.runAsync(() -> kafkaProducer.sendToSingle(sendMessage));
+        }
+        CompletableFuture.allOf(futures).join(); // 等待所有的任務完成
+        return NUMBER_OF_MESSAGES+"Sent message to Single topic: " + message;
     }
     /**
-     * 測試發送正常訊息到 secondary topic
+     * 測試發送正常訊息到 MultiConsumer topic
      * @param message 要發送的訊息
      * @return 發送結果字串
      */
-    public String sendToSecondary(String message) {
-        kafkaProducer.sendToSecondary("key-secondary", message);
-        return "Sent message to secondary topic: " + message;
+    public String sendToMultiConsumer(String message) {
+        CompletableFuture<?>[] futures = new CompletableFuture[NUMBER_OF_MESSAGES];
+        for (int i = 1; i <= NUMBER_OF_MESSAGES; i++) {
+            String sendMessage = message + i;
+            futures[i - 1] = CompletableFuture.runAsync(() -> kafkaProducer.sendToMultiConsumer(sendMessage));
+        }
+        CompletableFuture.allOf(futures).join(); // 等待所有的任務完成
+        return NUMBER_OF_MESSAGES+"Sent message to MultiConsumer topic: " + message;
+    }
+
+    /**
+     * 測試發送正常訊息到 MultiGroup topic (one topic, multiple groups)
+     * @param message 要發送的訊息
+     * @return 發送結果字串
+     */
+    public String sendToMultiGroup(String message) {
+        CompletableFuture<?>[] futures = new CompletableFuture[NUMBER_OF_MESSAGES];
+        for (int i = 1; i <= NUMBER_OF_MESSAGES; i++) {
+            String sendMessage = message + i;
+            futures[i - 1] = CompletableFuture.runAsync(() -> kafkaProducer.sendToMultiGroup(sendMessage));
+        }
+        CompletableFuture.allOf(futures).join(); // 等待所有的任務完成
+        return NUMBER_OF_MESSAGES+"Sent message to MultiGroup topic: " + message;
     }
 
     /**
@@ -44,8 +72,13 @@ public class KafkaMessageService {
      * @return 發送結果字串
      */
     public String sendToError( String message) {
-        kafkaProducer.sendToPrimary("key-error", message);
-        return "Sent error message to primary topic to trigger retry and dead letter handling: " + message;
+        CompletableFuture<?>[] futures = new CompletableFuture[NUMBER_OF_MESSAGES];
+        for (int i = 1; i <= NUMBER_OF_MESSAGES; i++) {
+            String sendMessage = message + i;
+            futures[i - 1] = CompletableFuture.runAsync(() -> kafkaProducer.sendToSingle(sendMessage));
+        }
+        CompletableFuture.allOf(futures).join();
+        return NUMBER_OF_MESSAGES+"Sent error message to trigger retry and dead letter handling: " + message;
     }
 
     /**
@@ -55,7 +88,12 @@ public class KafkaMessageService {
      * @return 發送結果字串
      */
     public String sendToStream( String message) {
-        kafkaProducer.sendToStreamInput("key-stream", message);
-        return "Sent message to stream input topic: " + message;
+        CompletableFuture<?>[] futures = new CompletableFuture[NUMBER_OF_MESSAGES];
+        for (int i = 1; i <= NUMBER_OF_MESSAGES; i++) {
+            String sendMessage = message + i;
+            futures[i - 1] = CompletableFuture.runAsync(() -> kafkaProducer.sendToInputStream(sendMessage));
+        }
+        CompletableFuture.allOf(futures).join();
+        return NUMBER_OF_MESSAGES+"Sent message to stream input topic: " + message;
     }
 }

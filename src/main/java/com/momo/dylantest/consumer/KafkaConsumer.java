@@ -1,12 +1,10 @@
 package com.momo.dylantest.consumer;
 
 import com.momo.dylantest.properties.KafkaConfigProperties;
-import com.momo.dylantest.service.message.RabbitMessageService;
 import com.momo.dylantest.util.LogUtil;
-import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
@@ -15,42 +13,73 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class KafkaConsumer {
 
-    private final KafkaConfigProperties kafkaConfigProperties;
+    private static final String RECEIVED_MESSAGE_FORMAT = "Group: %s, Message: %s";
+    private static final String MULTI_CONSUMER_MESSAGE_FORMAT = 
+            "Thread: %s, Partition: %d, Offset: %d, Message: %s";
+    private static final String SINGLE_CONSUMER = "Single Consumer";
+    private static final String MULTI_CONSUMER = "Multi Consumer";
+    private static final String MULTI_GROUP_CONSUMER = "Multi-Group Consumer";
 
-    @Resource
-    private RabbitMessageService messageService;
-    @Autowired
-    private RabbitMessageService messageService1;
+    private final KafkaConfigProperties properties;
 
 
-    // 監聽 primary topic
+
     @KafkaListener(
-            topics = "#{@kafkaConfigProperties.topics.primary}",
-            groupId = "#{@kafkaConfigProperties.consumer.groupId}"
+        topics = "#{@kafkaConfigProperties.topics.single.name}",
+        groupId = "#{@kafkaConfigProperties.topics.single.group}"
     )
-    public void listenPrimary(String message) {
-        log.info(LogUtil.info(LogUtil.GATE_OTHER,"Received message from primary topic: {}", message));
-        // 當訊息包含 "error" 時，拋出例外以測試 retry 與死信處理
-        if (message != null && message.contains("error")) {
-            throw new RuntimeException("Simulated exception for retry");
+    public void listenSingle(String message) {
+        String logMessage = String.format(RECEIVED_MESSAGE_FORMAT,
+                properties.getTopics().getSingle().getGroup(), message);
+        log.info(LogUtil.info(LogUtil.GATE_OTHER, SINGLE_CONSUMER, logMessage));
+        processMessage(properties.getTopics().getSingle().getGroup(), message);
+    }
+
+    @KafkaListener(
+            topics = "#{@kafkaConfigProperties.topics.multiConsumer.name}",
+            groupId = "#{@kafkaConfigProperties.topics.multiConsumer.group}",
+            containerFactory = "multiConsumerContainerFactory"
+    )
+    public void listenMultiConsumer(String message, ConsumerRecord<String, String> record) {
+        String logMessage = String.format(MULTI_CONSUMER_MESSAGE_FORMAT,
+                Thread.currentThread().getName(),
+                record.partition(),
+                record.offset(),
+                record.value());
+        log.info(LogUtil.info(LogUtil.GATE_OTHER, MULTI_CONSUMER, logMessage));
+        processMessage(properties.getTopics().getMultiConsumer().getGroup(), message);
+    }
+
+    @KafkaListener(
+            topics = "#{@kafkaConfigProperties.topics.multiGroup.name}",
+            groupId = "#{@kafkaConfigProperties.topics.multiGroup.groups[0]}"
+    )
+    public void listenMultiGroup_Group0(String message) {
+        String groupName = properties.getTopics().getMultiGroup().getGroups().get(0);
+        String logMessage = String.format(RECEIVED_MESSAGE_FORMAT, groupName, message);
+        log.info(LogUtil.info(LogUtil.GATE_OTHER,
+                MULTI_GROUP_CONSUMER + "-Group0", logMessage));
+        processMessage(groupName, message);
+    }
+
+    @KafkaListener(
+            topics = "#{@kafkaConfigProperties.topics.multiGroup.name}",
+            groupId = "#{@kafkaConfigProperties.topics.multiGroup.groups[1]}"
+    )
+    public void listenMultiGroup_Group1(String message) {
+        String groupName = properties.getTopics().getMultiGroup().getGroups().get(1);
+        String logMessage = String.format(RECEIVED_MESSAGE_FORMAT, groupName, message);
+        log.info(LogUtil.info(LogUtil.GATE_OTHER,
+                MULTI_GROUP_CONSUMER + "-Group1", logMessage));
+        processMessage(groupName, message);
+    }
+
+    private void processMessage(String consumerType, String message) {
+        String logMessage = String.format("處理消息: %s, 內容: %s", consumerType, message);
+        log.info(LogUtil.info(LogUtil.GATE_OTHER, "processMessage", logMessage));
+
+        if (message.contains("error")) {
+            throw new RuntimeException("模擬錯誤以測試重試機制");
         }
-    }
-
-    // 監聽 secondary topic
-    @KafkaListener(
-            topics = "#{@kafkaConfigProperties.topics.secondary}",
-            groupId = "#{@kafkaConfigProperties.consumer.groupId}"
-    )
-    public void listenSecondary(String message) {
-        log.info(LogUtil.info(LogUtil.GATE_OTHER,"Received message from secondary topic: {}", message));
-    }
-
-    // 監聽 dead-letter topic
-    @KafkaListener(
-            topics = "#{@kafkaConfigProperties.topics.deadLetter}",
-            groupId = "#{@kafkaConfigProperties.consumer.groupId}-dlq"
-    )
-    public void listenDeadLetter(String message) {
-        log.info(LogUtil.info(LogUtil.GATE_OTHER,"Received message from dead letter topic: {}", message));
     }
 }
